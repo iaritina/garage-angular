@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from 'src/app/material.module';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-side-login',
@@ -13,12 +14,32 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class AppSideLoginComponent {
 
-  constructor( private router: Router) {}
+  email: string = '';
+  password: string = '';
+  errorMessage: string = '';
+
+  constructor(
+    private router: Router,
+    private userService: UserService,
+  ) {}
 
   form = new FormGroup({
-    uname: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    email: new FormControl('', [Validators.required, Validators.required]),
     password: new FormControl('', [Validators.required]),
   });
+
+  login() {
+    console.log("data", this.email, this.password);
+    this.userService.login(this.email,this.password).subscribe({
+      next: (response) => {
+        localStorage.setItem("token",response.token);
+        this.router.navigate(['/dashboard']);
+      },
+      error: (error) => {
+        this.errorMessage = 'Identifiants incorrects';
+      }
+    })
+  }
 
   get f() {
     return this.form.controls;
