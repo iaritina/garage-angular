@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CoreService } from 'src/app/services/core.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from 'src/app/material.module';
 import { Title } from '@angular/platform-browser';
 import { AppName } from 'src/app/app.config';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-side-register',
@@ -16,6 +17,7 @@ import { AppName } from 'src/app/app.config';
 })
 export class AppSideRegisterComponent implements OnInit {
   options = this.settings.getOptions();
+  private userService = inject(UserService);
 
   constructor(
     private settings: CoreService,
@@ -68,6 +70,12 @@ export class AppSideRegisterComponent implements OnInit {
   submit(event: Event) {
     // console.log(this.form.value);
     event.preventDefault();
-    this.router.navigate(['/']);
+    if (this.form.invalid) {
+      return;
+    }
+    this.userService.registerUser(this.form.value).subscribe(() => {
+      this.form.reset();
+      this.router.navigate(['/']);
+    });
   }
 }
