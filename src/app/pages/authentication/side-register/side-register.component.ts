@@ -8,6 +8,8 @@ import { MaterialModule } from 'src/app/material.module';
 import { Title } from '@angular/platform-browser';
 import { AppName } from 'src/app/app.config';
 import { UserService } from 'src/app/services/user/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackBarComponent } from 'src/app/components/snackbar/snack-bar/snack-bar.component';
 
 @Component({
   selector: 'app-side-register',
@@ -18,6 +20,7 @@ import { UserService } from 'src/app/services/user/user.service';
 export class AppSideRegisterComponent implements OnInit {
   options = this.settings.getOptions();
   private userService = inject(UserService);
+  private snackBar = inject(MatSnackBar);
 
   constructor(
     private settings: CoreService,
@@ -60,6 +63,10 @@ export class AppSideRegisterComponent implements OnInit {
       return 'Veuillez entrer une adresse email valide';
     }
 
+    if (control.hasError('minlength')) {
+      return 'Le mot de passe doit contenir au moins 6 caractères';
+    }
+
     return '';
   }
 
@@ -68,7 +75,6 @@ export class AppSideRegisterComponent implements OnInit {
   }
 
   submit(event: Event) {
-    // console.log(this.form.value);
     event.preventDefault();
     if (this.form.invalid) {
       return;
@@ -76,6 +82,13 @@ export class AppSideRegisterComponent implements OnInit {
     this.userService.registerUser(this.form.value).subscribe(() => {
       this.form.reset();
       this.router.navigate(['/']);
+      this.snackBar.openFromComponent(SnackBarComponent, {
+        data: { message: 'Inscription réussie ✅', type: 'success' },
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snackbar-bg'],
+      });
     });
   }
 }
