@@ -4,6 +4,7 @@ import { FullComponent } from './layouts/full/full.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ServiceComponent } from './pages/service/service.component';
 import { MechanicComponent } from './pages/mechanic/mechanic.component';
+import { VehicleBrandComponent } from './pages/vehicle-brand/vehicle-brand.component';
 
 export const routes: Routes = [
   {
@@ -11,13 +12,26 @@ export const routes: Routes = [
     component: FullComponent,
     children: [
       { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-      {path: 'services', component: ServiceComponent, canActivate: [AuthGuard]},
-      {path: 'mechanic', component: MechanicComponent, canActivate: [AuthGuard]},
+      {
+        path: 'services',
+        component: ServiceComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'brands-models',
+        component: VehicleBrandComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'mechanic',
+        component: MechanicComponent,
+        canActivate: [AuthGuard],
+      },
       {
         path: 'dashboard',
         loadChildren: () =>
           import('./pages/pages.routes').then((m) => m.PagesRoutes),
-        canActivate: [AuthGuard] // Protéger cette route avec AuthGuard
+        canActivate: [AuthGuard], // Protéger cette route avec AuthGuard
       },
       {
         path: 'ui-components',
@@ -25,14 +39,13 @@ export const routes: Routes = [
           import('./pages/ui-components/ui-components.routes').then(
             (m) => m.UiComponentsRoutes
           ),
-        canActivate: [AuthGuard] // Protéger cette route avec AuthGuard
       },
       {
         path: 'extra',
         loadChildren: () =>
           import('./pages/extra/extra.routes').then((m) => m.ExtraRoutes),
-        canActivate: [AuthGuard] // Protéger cette route avec AuthGuard
-      }
+        canActivate: [AuthGuard], // Protéger cette route avec AuthGuard
+      },
     ],
   },
   {
@@ -45,9 +58,9 @@ export const routes: Routes = [
           import('./pages/authentication/authentication.routes').then(
             (m) => m.AuthenticationRoutes
           ),
-      }
+      },
     ],
   },
   // Redirection si l'URL ne correspond à aucune route
-  { path: '**', redirectTo: '/authentication/login' }
+  { path: '**', redirectTo: '/authentication/login' },
 ];
