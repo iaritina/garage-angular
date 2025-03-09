@@ -18,7 +18,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarComponent } from 'src/app/components/snackbar/snack-bar/snack-bar.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { BrandFormComponent } from './form/brand-form/brand-form.component';
+import { BrandFormComponent } from './form/brand-form.component';
 
 export interface IVehicleBrand {
   _id: string;
