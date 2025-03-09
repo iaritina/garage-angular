@@ -50,7 +50,7 @@ export class ServiceComponent implements OnInit{
   form = new FormGroup({
       name: new FormControl('', [Validators.required]),
       price: new FormControl('', [Validators.required]),
-      duration: new FormControl('', [Validators.required, Validators.email]),
+      duration: new FormControl('', [Validators.required]),
     });
 
   getAllService() {
