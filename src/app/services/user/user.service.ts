@@ -37,4 +37,12 @@ export class UserService {
       return false;
     }
   }
+
+  getAllUser(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/users`);
+  }
+
+  deleteUser(id: string) {
+    return this.http.put(`${environment.apiUrl}/users/delete/${id}`, {});
+  }
 }

@@ -3,6 +3,7 @@ import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent } from './layouts/full/full.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ServiceComponent } from './pages/service/service.component';
+import { MechanicComponent } from './pages/mechanic/mechanic.component';
 
 export const routes: Routes = [
   {
@@ -11,6 +12,7 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
       {path: 'services', component: ServiceComponent, canActivate: [AuthGuard]},
+      {path: 'mechanic', component: MechanicComponent, canActivate: [AuthGuard]},
       {
         path: 'dashboard',
         loadChildren: () =>
