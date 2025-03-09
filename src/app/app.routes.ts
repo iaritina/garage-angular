@@ -5,6 +5,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { ServiceComponent } from './pages/service/service.component';
 import { MechanicComponent } from './pages/mechanic/mechanic.component';
 import { VehicleBrandComponent } from './pages/vehicle-brand/vehicle-brand.component';
+import { AppointmentListComponent } from './pages/appointment-list/appointment-list.component';
 
 export const routes: Routes = [
   {
@@ -12,6 +13,11 @@ export const routes: Routes = [
     component: FullComponent,
     children: [
       { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+      {
+        path: 'appointments',
+        component: AppointmentListComponent,
+        canActivate: [AuthGuard],
+      },
       {
         path: 'services',
         component: ServiceComponent,
