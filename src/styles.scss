@@ -12,3 +12,12 @@ body {
     --mat-sys-inverse-surface: $secondary;
   }
 }
+.delete-btn {
+  color: red;
+}
+
+.actions-button {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Ajustez cette valeur pour l'espacement souhaité entre les boutons */
+}

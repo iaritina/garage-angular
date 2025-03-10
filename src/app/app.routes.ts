@@ -4,10 +4,11 @@ import { FullComponent } from './layouts/full/full.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ServiceComponent } from './pages/service/service.component';
 import { MechanicComponent } from './pages/mechanic/mechanic.component';
-import { VehicleBrandComponent } from './pages/vehicle-brand/vehicle-brand.component';
 import { AppointmentListComponent } from './pages/appointment-list/appointment-list.component';
 import { VehicleComponent } from './pages/vehicle/vehicle.component';
 import { VehicleFormComponent } from './pages/vehicle/vehicle-form/vehicle-form.component';
+import { VehicleBrandComponent } from './pages/brands-models/vehicle-brand/vehicle-brand.component';
+import { BrandsModelsComponent } from './pages/brands-models/brands-models.component';
 
 export const routes: Routes = [
   {
@@ -37,8 +38,7 @@ export const routes: Routes = [
       },
       {
         path: 'brands-models',
-        component: VehicleBrandComponent,
-        canActivate: [AuthGuard],
+        component: BrandsModelsComponent,
       },
       {
         path: 'mechanic',

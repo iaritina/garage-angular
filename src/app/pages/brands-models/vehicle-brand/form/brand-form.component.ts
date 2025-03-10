@@ -2,10 +2,8 @@ import {
   Component,
   EventEmitter,
   Input,
-  input,
   OnChanges,
   Output,
-  output,
   SimpleChanges,
 } from '@angular/core';
 import {
@@ -15,6 +13,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
@@ -25,6 +24,7 @@ import { MatInputModule } from '@angular/material/input';
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,
+    MatButtonModule,
   ],
   templateUrl: './brand-form.component.html',
   styleUrl: './brand-form.component.scss',
