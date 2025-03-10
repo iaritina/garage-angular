@@ -6,6 +6,8 @@ import { ServiceComponent } from './pages/service/service.component';
 import { MechanicComponent } from './pages/mechanic/mechanic.component';
 import { VehicleBrandComponent } from './pages/vehicle-brand/vehicle-brand.component';
 import { AppointmentListComponent } from './pages/appointment-list/appointment-list.component';
+import { VehicleComponent } from './pages/vehicle/vehicle.component';
+import { VehicleFormComponent } from './pages/vehicle/vehicle-form/vehicle-form.component';
 
 export const routes: Routes = [
   {
@@ -13,6 +15,16 @@ export const routes: Routes = [
     component: FullComponent,
     children: [
       { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+      {
+        path: 'vehicles',
+        component: VehicleComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'add-vehicle',
+        component: VehicleFormComponent,
+        canActivate: [AuthGuard],
+      },
       {
         path: 'appointments',
         component: AppointmentListComponent,

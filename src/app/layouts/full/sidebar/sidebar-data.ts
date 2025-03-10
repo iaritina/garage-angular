@@ -11,43 +11,63 @@ export const navItems: NavItem[] = [
   },
 
   {
-    navCap: 'Ui Components',
+    navCap: 'Navigations',
   },
   {
-    displayName: 'Badge',
-    iconName: 'archive',
-    route: '/ui-components/badge',
+    displayName: 'Rendez-vous',
+    iconName: 'calendar',
+    route: '/appointments',
   },
   {
-    displayName: 'Chips',
-    iconName: 'info-circle',
-    route: '/ui-components/chips',
+    displayName: 'Vehicules',
+    iconName: 'car',
+    route: '/vehicles',
   },
   {
-    displayName: 'Lists',
-    iconName: 'list-details',
-    route: '/ui-components/lists',
+    displayName: 'Marques',
+    iconName: 'brand',
+    route: '/brands-models',
   },
   {
-    displayName: 'Menu',
-    iconName: 'file-text',
-    route: '/ui-components/menu',
+    displayName: "Services",
+    iconName: "hommer",
+    route: "/services",
   },
-  {
-    displayName: 'Tooltips',
-    iconName: 'file-text-ai',
-    route: '/ui-components/tooltips',
-  },
-  {
-    displayName: 'Forms',
-    iconName: 'clipboard-text',
-    route: '/ui-components/forms',
-  },
-  {
-    displayName: 'Tables',
-    iconName: 'table',
-    route: '/ui-components/tables',
-  },
+  // {
+  //   displayName: 'Badge',
+  //   iconName: 'archive',
+  //   route: '/ui-components/badge',
+  // },
+  // {
+  //   displayName: 'Chips',
+  //   iconName: 'info-circle',
+  //   route: '/ui-components/chips',
+  // },
+  // {
+  //   displayName: 'Lists',
+  //   iconName: 'list-details',
+  //   route: '/ui-components/lists',
+  // },
+  // {
+  //   displayName: 'Menu',
+  //   iconName: 'file-text',
+  //   route: '/ui-components/menu',
+  // },
+  // {
+  //   displayName: 'Tooltips',
+  //   iconName: 'file-text-ai',
+  //   route: '/ui-components/tooltips',
+  // },
+  // {
+  //   displayName: 'Forms',
+  //   iconName: 'clipboard-text',
+  //   route: '/ui-components/forms',
+  // },
+  // {
+  //   displayName: 'Tables',
+  //   iconName: 'table',
+  //   route: '/ui-components/tables',
+  // },
 
   {
     navCap: 'Auth',
