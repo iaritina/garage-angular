@@ -1,0 +1,47 @@
+
+@import "src/assets/scss/_variables";
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  height: 500px; /* Ajustez la hauteur selon vos besoins */
+}
+
+.fixed-size-table {
+  flex: 1;
+  overflow: auto;
+}
+
+mat-paginator {
+  margin-top: auto; /* Positionne le paginateur en bas */
+}
+
+
+
+.brand {
+  width: 40%;
+}
+
+.mat-mdc-table {
+  width: 100%;
+  max-height: 500px;
+  overflow: auto;
+}
+
+.mat-column-name {
+  height: 100px;
+}
+
+.action-header {
+  display: flex;
+}
+
+.delete-btn {
+  color: red;
+}
+
+.actions-button {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Ajustez cette valeur pour l'espacement souhaité entre les boutons */
+}

@@ -78,7 +78,6 @@ export class VehicleBrandComponent implements OnInit {
   }
 
   saveBrand(brand: { name: string }) {
-    // si il y a une marque selectionnée
     if (this.selectedBrand) {
       this.brandsService
         .updateBrand(this.selectedBrand._id, brand)
