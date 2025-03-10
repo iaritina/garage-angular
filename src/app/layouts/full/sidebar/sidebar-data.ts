@@ -13,11 +13,11 @@ export const navItems: NavItem[] = [
   {
     navCap: 'Navigations',
   },
-  {
-    displayName: 'Rendez-vous',
-    iconName: 'calendar',
-    route: '/appointments',
-  },
+  // {
+  //   displayName: 'Rendez-vous',
+  //   iconName: 'calendar',
+  //   route: '/appointments',
+  // },
   {
     displayName: 'Vehicules',
     iconName: 'car',

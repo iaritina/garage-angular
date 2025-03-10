@@ -1,14 +1,12 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from './guards/auth.guard';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent } from './layouts/full/full.component';
-import { AuthGuard } from './guards/auth.guard';
-import { ServiceComponent } from './pages/service/service.component';
-import { MechanicComponent } from './pages/mechanic/mechanic.component';
-import { AppointmentListComponent } from './pages/appointment-list/appointment-list.component';
-import { VehicleComponent } from './pages/vehicle/vehicle.component';
-import { VehicleFormComponent } from './pages/vehicle/vehicle-form/vehicle-form.component';
-import { VehicleBrandComponent } from './pages/brands-models/vehicle-brand/vehicle-brand.component';
 import { BrandsModelsComponent } from './pages/brands-models/brands-models.component';
+import { MechanicComponent } from './pages/mechanic/mechanic.component';
+import { ServiceComponent } from './pages/service/service.component';
+import { VehicleFormComponent } from './pages/vehicle/vehicle-form/vehicle-form.component';
+import { VehicleComponent } from './pages/vehicle/vehicle.component';
 
 export const routes: Routes = [
   {
@@ -26,11 +24,11 @@ export const routes: Routes = [
         component: VehicleFormComponent,
         canActivate: [AuthGuard],
       },
-      {
-        path: 'appointments',
-        component: AppointmentListComponent,
-        canActivate: [AuthGuard],
-      },
+      // {
+      //   path: 'appointments',
+      //   component: AppointmentListComponent,
+      //   canActivate: [AuthGuard],
+      // },
       {
         path: 'services',
         component: ServiceComponent,
