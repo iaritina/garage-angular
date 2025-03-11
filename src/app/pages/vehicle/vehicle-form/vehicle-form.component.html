@@ -1,0 +1,37 @@
+<mat-dialog-content>
+  <h2 mat-dialog-title>{{ vehicleData ? 'Modifier' : 'Ajouter' }} un véhicule</h2>
+  <form [formGroup]="form" (submit)="submit($event)">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Marque</mat-label>
+      <mat-select formControlName="brand">
+        @for (brand of brands; track brand._id) {
+        <mat-option [value]="brand._id"> {{ brand.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Modele</mat-label>
+      <mat-select formControlName="model">
+        @for (model of models; track model._id) {
+        <mat-option [value]="model._id"> {{ model.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Immatriculation</mat-label>
+      <input matInput name="immatriculation" formControlName="immatriculation" type="text" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Annee</mat-label>
+      <input matInput name="year" formControlName="year" type="number" required>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">Annuler</button>
+  <button mat-raised-button color="primary" (click)="submit($event)">Enregistrer</button>
+</mat-dialog-actions>
