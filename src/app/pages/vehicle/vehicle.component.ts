@@ -14,6 +14,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { VehicleFormComponent } from "./vehicle-form/vehicle-form.component";
 import { CommonModule } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { SnackBarComponent } from 'src/app/components/snackbar/snack-bar/snack-bar.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-vehicle',
@@ -31,6 +35,7 @@ import { CommonModule } from '@angular/common';
     MatTableModule,
     MatPaginator,
     CommonModule,
+    MatMenuModule,
 ],
   templateUrl: './vehicle.component.html',
   styleUrls: ['./vehicle.component.scss']
@@ -47,6 +52,8 @@ export class VehicleComponent implements OnInit {
     private vehicleService: VehicleService,
     private tokenService: Token,
     private router: Router,
+    public dialog: MatDialog,
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
@@ -76,12 +83,64 @@ export class VehicleComponent implements OnInit {
     });
   }
 
-  addNewVehicle() {
-    this.showForm = true; 
+    openDialog(vehicle: any = null): void {
+      const dialogRef = this.dialog.open(VehicleFormComponent, {
+        width: '400px',
+        data: { vehicleData: vehicle }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          if (vehicle) {
+            this.updateVehicle(vehicle._id, result);
+          } else {
+            this.createNewVehicle(result);
+          }
+        }
+      });
+    }
+
+
+  createNewVehicle(vehicle: any) {
+    const token = localStorage.getItem("token");
+    const userId: any = this.tokenService.getUserFromToken(token);
+    vehicle.user = userId;
+    this.vehicleService.saveClientVehicle(vehicle).subscribe(() => {
+      this.getVehicleByUser();
+      this.snackBar.openFromComponent(SnackBarComponent, {
+          data: { message: "Service mis à jour avec succès ✅", type: 'success' },
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['snackbar-bg'],
+        });
+    });
   }
 
-  toggleForm() {
-    this.showForm = !this.showForm;
+  deleteVehicle(vehicle: any) {
+    this.vehicleService.deleteVehicle(vehicle._id).subscribe(() => {
+      this.getVehicleByUser();
+      this.snackBar.openFromComponent(SnackBarComponent, {
+        data: { message: "Vehicule supprimer avec succès ✅", type: 'success' },
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snackbar-bg'],
+      });
+    })
+  }
+
+  updateVehicle(id: string, vehicle: any) {
+    this.vehicleService.updateVehicle(id, vehicle).subscribe(() => {
+      this.getVehicleByUser();
+      this.snackBar.openFromComponent(SnackBarComponent, {
+        data: { message: "Vehicule mis à jour avec succès ✅", type: 'success' },
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snackbar-bg'],
+      });
+    })
   }
 
 }

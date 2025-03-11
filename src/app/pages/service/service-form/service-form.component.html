@@ -1,5 +1,5 @@
 <mat-dialog-content>
-  <h2 mat-dialog-title>Ajouter un service</h2>
+  <h2 mat-dialog-title>{{ serviceData ? 'Modifier' : 'Ajouter' }} un service</h2>
   <form [formGroup]="form" (submit)="submit($event)">
     <mat-form-field appearance="outline" class="w-100">
       <mat-label>Service</mat-label>

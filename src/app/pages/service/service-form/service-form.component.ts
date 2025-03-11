@@ -57,9 +57,8 @@ export class ServiceFormComponent implements OnChanges {
   submit(event: Event) {
     event.preventDefault();
     if (this.form.valid) {
-      console.log("Émission des données :", this.form.value);
       this.save.emit(this.form.value);
-      this.dialogRef.close(this.form.value); // Renvoie les données au parent
+      this.dialogRef.close(this.form.value);
     }
   }
 }
