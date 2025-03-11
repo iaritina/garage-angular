@@ -33,4 +33,10 @@ export class VehiclesModelsService {
       `${environment.apiUrl}/models/${id}`
     );
   }
+
+  getModelsOfOneBrand(id: string): Observable<IVehicleModel[]> {
+    return this.http.get<IVehicleModel[]>(
+      `${environment.apiUrl}/models/brand/${id}`
+    );
+  }
 }
