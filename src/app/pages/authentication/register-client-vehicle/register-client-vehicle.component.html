@@ -19,26 +19,33 @@
 
           <div class="or-border m-t-10">Enregistrer votre voiture</div>
 
-          <form class="m-t-30">
+          <form
+            class="m-t-30"
+            [formGroup]="form"
+            (submit)="saveClientVehicle($event)"
+          >
             <mat-label class="f-w-600 m-b-8 d-block">Marque</mat-label>
             <mat-form-field appearance="outline" class="w-100">
-              <mat-select
-                formControlName="brand"
-                (selectionChange)="onBrandChange($event.value)"
-              >
+              <mat-select formControlName="brand">
                 @for (brand of brands; track brand._id) {
                 <mat-option [value]="brand._id"> {{ brand.name }}</mat-option>
                 }
               </mat-select>
+              @if (isFieldValid("brand")) {
+              <mat-error>{{ getErrorMessage("brand") }}</mat-error>
+              }
             </mat-form-field>
 
             <mat-label class="f-w-600 m-b-8 d-block">Modeles</mat-label>
             <mat-form-field appearance="outline" class="w-100">
-              <mat-select formControlName="model" [disabled]="isModelDisabled">
+              <mat-select formControlName="model">
                 @for (model of models; track model._id) {
                 <mat-option [value]="model._id"> {{ model.name }}</mat-option>
                 }
               </mat-select>
+              @if (isFieldValid("model")) {
+              <mat-error>{{ getErrorMessage("model") }}</mat-error>
+              }
             </mat-form-field>
 
             <mat-label class="f-s-14 f-w-600 m-b-12 d-block"
@@ -50,14 +57,25 @@
                 name="immatriculation"
                 formControlName="immatriculation"
               />
+              @if (isFieldValid("immatriculation")) {
+              <mat-error>{{ getErrorMessage("immatriculation") }}</mat-error>
+              }
             </mat-form-field>
 
             <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Année</mat-label>
             <mat-form-field appearance="outline" color="primary">
               <input matInput name="year" formControlName="year" />
+              @if (isFieldValid("year")) {
+              <mat-error>{{ getErrorMessage("year") }}</mat-error>
+              }
             </mat-form-field>
 
-            <button mat-flat-button color="primary" class="w-100">
+            <button
+              mat-flat-button
+              color="primary"
+              class="w-100"
+              [disabled]="!form.valid"
+            >
               Enregistrer
             </button>
           </form>
