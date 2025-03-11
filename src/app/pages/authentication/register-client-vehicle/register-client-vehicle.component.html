@@ -1,0 +1,68 @@
+<div
+  class="blank-layout-container justify-content-center align-items-center bg-light"
+>
+  <div
+    class="position-relative row w-100 h-100 bg-gredient justify-content-center"
+  >
+    <div class="col-lg-4 d-flex align-items-center">
+      <mat-card class="cardWithShadow boxed-auth">
+        <mat-card-content class="p-32">
+          <div class="text-center">
+            <a>
+              <img
+                src="./assets/images/logos/garage.svg"
+                class="logo align-middle m-2"
+                alt="logo"
+              />
+            </a>
+          </div>
+
+          <div class="or-border m-t-10">Enregistrer votre voiture</div>
+
+          <form class="m-t-30">
+            <mat-label class="f-w-600 m-b-8 d-block">Marque</mat-label>
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-select
+                formControlName="brand"
+                (selectionChange)="onBrandChange($event.value)"
+              >
+                @for (brand of brands; track brand._id) {
+                <mat-option [value]="brand._id"> {{ brand.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-label class="f-w-600 m-b-8 d-block">Modeles</mat-label>
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-select formControlName="model" [disabled]="isModelDisabled">
+                @for (model of models; track model._id) {
+                <mat-option [value]="model._id"> {{ model.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-label class="f-s-14 f-w-600 m-b-12 d-block"
+              >Immatriculation</mat-label
+            >
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+              <input
+                matInput
+                name="immatriculation"
+                formControlName="immatriculation"
+              />
+            </mat-form-field>
+
+            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Année</mat-label>
+            <mat-form-field appearance="outline" color="primary">
+              <input matInput name="year" formControlName="year" />
+            </mat-form-field>
+
+            <button mat-flat-button color="primary" class="w-100">
+              Enregistrer
+            </button>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
