@@ -1,7 +1,5 @@
-import { SnackBarComponent } from 'src/app/components/snackbar/snack-bar/snack-bar.component';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,32 +9,34 @@ import { MaterialModule } from 'src/app/material.module';
 import { ServiceService } from 'src/app/services/service/service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+import { ServiceFormComponent } from './service-form/service-form.component';
+import { SnackBarComponent } from 'src/app/components/snackbar/snack-bar/snack-bar.component';
 
 @Component({
   selector: 'app-service',
+  standalone: true, // Ajouté pour éviter les erreurs d'importation
   imports: [
-        MatTableModule,
-        CommonModule,
-        MatCardModule,
-        MaterialModule,
-        MatIconModule,
-        MatMenuModule,
-        MatButtonModule,
-        ReactiveFormsModule,
+    MatTableModule,
+    CommonModule,
+    MatCardModule,
+    MaterialModule,
+    MatIconModule,
+    MatMenuModule,
+    MatButtonModule,
   ],
   templateUrl: './service.component.html',
   styleUrl: './service.component.scss'
 })
-export class ServiceComponent implements OnInit{
+export class ServiceComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   displayedColumns1: string[] = ['name', 'price', 'duration', 'actions'];
   dataSource1: MatTableDataSource<any> = new MatTableDataSource();
 
-  isFormVisible:boolean = false;
-
   constructor(
     private service: ServiceService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -46,12 +46,6 @@ export class ServiceComponent implements OnInit{
   ngAfterViewInit() {
     this.dataSource1.paginator = this.paginator;
   }
-
-  form = new FormGroup({
-      name: new FormControl('', [Validators.required]),
-      price: new FormControl('', [Validators.required]),
-      duration: new FormControl('', [Validators.required]),
-    });
 
   getAllService() {
     this.service.getAllService().subscribe({
@@ -63,55 +57,63 @@ export class ServiceComponent implements OnInit{
   }
 
   deleteService(service: any) {
-    this.service.delete(service._id).subscribe({
-      next: () => {
-        this.getAllService();
-      },
-      error: (err) => console.error('Erreur lor de la suppression du service',err)
-    });
-  }
-
-  openForm() {
-    this.isFormVisible = true;
-  }
-
-  closeForm() {
-    this.isFormVisible = false;
-  }
-
-  isFieldValid(field: string) {
-    const formControl = this.form.get(field);
-    return formControl?.invalid && (formControl?.dirty || formControl?.touched);
-  }
-
-  getErrorMessage(controlName: string): string {
-    const control = this.form.get(controlName);
-    if (!control) return '';
-
-    if (control.hasError('required')) {
-      return 'Ce champ est requis';
-    }
-    return '';
-  }
-
-  submit(event: Event) {
-    event.preventDefault();
-
-    this.service.createNewService(this.form.value).subscribe(() =>{
-      this.form.reset();
+    this.service.deleteService(service._id).subscribe(() => {
       this.getAllService();
-      this.isFormVisible = false;
       this.snackBar.openFromComponent(SnackBarComponent, {
-        data: {message: "Service creer avec success ✅", type: 'success'},
+        data: { message: "Service supprimer avec succès ✅", type: 'success' },
         duration: 3000,
         horizontalPosition: 'center',
         verticalPosition: 'top',
         panelClass: ['snackbar-bg'],
-      })
+      });
+    });
+  }
+
+  openDialog(service: any = null): void {
+    const dialogRef = this.dialog.open(ServiceFormComponent, {
+      width: '400px',
+      data: { serviceData: service }
     });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (service) {
+          this.updateService(service._id, result);
+        } else {
+
+          this.saveService(result);
+        }
+      }
+    });
   }
 
 
+  saveService(service: any) {
+    console.log("Données envoyées au backend :", service);
+    this.service.createNewService(service).subscribe(() => {
+      this.getAllService();
+      this.snackBar.openFromComponent(SnackBarComponent, {
+        data: { message: "Service créé avec succès ✅", type: 'success' },
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snackbar-bg'],
+      });
+    });
+  }
+
+
+  updateService(id: string, serviceData: any) {
+    this.service.updateService(id, serviceData).subscribe(() => {
+      this.getAllService();
+      this.snackBar.openFromComponent(SnackBarComponent, {
+        data: { message: "Service mis à jour avec succès ✅", type: 'success' },
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snackbar-bg'],
+      });
+    });
+  }
 
 }

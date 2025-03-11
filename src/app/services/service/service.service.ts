@@ -14,11 +14,15 @@ export class ServiceService {
     return this.http.get<any[]>(`${environment.apiUrl}/services`);
   }
 
-  delete(id: string) {
-    return this.http.delete<void>(`${environment.apiUrl}/services/${id}`);
-  }
-
   createNewService(data: any):Observable<any> {
     return this.http.post(`${environment.apiUrl}/services`,data);
+  }
+
+  updateService(id: string, data: any):Observable<any> {
+    return this.http.patch<any>(`${environment.apiUrl}/services/${id}`,data);
+  }
+
+  deleteService(id: string) {
+    return this.http.put<any>(`${environment.apiUrl}/services/delete/${id}`,{});
   }
 }

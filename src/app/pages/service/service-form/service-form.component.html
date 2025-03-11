@@ -1,0 +1,29 @@
+<mat-dialog-content>
+  <h2 mat-dialog-title>Ajouter un service</h2>
+  <form [formGroup]="form" (submit)="submit($event)">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Service</mat-label>
+      <input matInput name="name" formControlName="name" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Prix</mat-label>
+      <input matInput name="current_price" formControlName="current_price" type="number" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Prochaine KM</mat-label>
+      <input matInput name="next_service_km" formControlName="next_service_km" type="number" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Durée</mat-label>
+      <input matInput name="duration" formControlName="duration" type="time" required>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">Annuler</button>
+  <button mat-raised-button color="primary" (click)="submit($event)">Enregistrer</button>
+</mat-dialog-actions>
