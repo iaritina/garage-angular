@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
+import { IUser } from 'src/app/pages/authentication/side-login/side-login.component';
 import { environment } from 'src/environments/environments';
 
 @Injectable({
@@ -44,5 +45,9 @@ export class UserService {
 
   deleteUser(id: string) {
     return this.http.put(`${environment.apiUrl}/users/delete/${id}`, {});
+  }
+
+  getUserByEmail(email: string): Observable<IUser> {
+    return this.http.get<IUser>(`${environment.apiUrl}/users/client/${email}`);
   }
 }
