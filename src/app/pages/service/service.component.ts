@@ -71,7 +71,7 @@ export class ServiceComponent implements OnInit {
   openDialog(service: any = null): void {
     const dialogRef = this.dialog.open(ServiceFormComponent, {
       width: '400px',
-      data: { ReserviceData: service }
+      data: { serviceData: service }
     });
 
     dialogRef.afterClosed().subscribe(result => {
