@@ -43,6 +43,14 @@ export class UserService {
     return this.http.get<any[]>(`${environment.apiUrl}/users`);
   }
 
+  createUser(user: any): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/users/mechanicRegistration`,user);
+  }
+
+  updateUser(id: string, user: any): Observable<any> {
+    return this.http.put<any>(`${environment.apiUrl}/users/${id}`,user);
+  }
+
   deleteUser(id: string) {
     return this.http.put(`${environment.apiUrl}/users/delete/${id}`, {});
   }

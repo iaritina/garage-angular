@@ -14,7 +14,6 @@ export class VehicleService {
   }
 
   saveClientVehicle(value: any): Observable<any> {
-    console.log(value);
     return this.http.post<any>(`${environment.apiUrl}/vehicles/`, value);
   }
 

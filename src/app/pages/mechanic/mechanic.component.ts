@@ -4,6 +4,7 @@ import { Component,OnInit, ViewChild} from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -14,6 +15,7 @@ import { SnackBarComponent } from 'src/app/components/snackbar/snack-bar/snack-b
 import { MaterialModule } from 'src/app/material.module';
 import { ServiceService } from 'src/app/services/service/service.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { MechanicFormComponent } from './mechanic-form/mechanic-form.component';
 
 @Component({
   selector: 'app-mechanic',
@@ -37,14 +39,13 @@ export class MechanicComponent implements OnInit {
   constructor(
     private userService: UserService,
     private snackBar: MatSnackBar,
+    public dialog: MatDialog
   ) {}
 
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   displayedColumns1: string[] = ['firstname', 'lastname', 'specialities', 'actions'];
   dataSource1: MatTableDataSource<any> = new MatTableDataSource();
 
-  isFormVisible: boolean = false;
 
   ngOnInit(): void {
     this.getAllMechanics();
@@ -79,51 +80,49 @@ export class MechanicComponent implements OnInit {
     });
   }
 
+  openDialog(mechanic: any = null):void {
+    const dialogRef = this.dialog.open(MechanicFormComponent, {
+      width: '600px',
+      data: { mechanicData: mechanic }
+    });
 
-  openForm() {
-    this.isFormVisible = true;
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        if(mechanic) {
+          this.updateMechanic(mechanic._id, result);
+        }
+        else {
+          this.saveMechanic(result);
+        }
+      }
+    })
   }
 
-  closeForm() {
-    this.isFormVisible = false;
-  }
 
-  form = new FormGroup({
-    firstname: new FormControl('', [Validators.required]),
-    lastname: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    phone: new FormControl('', [Validators.required]),
-    role: new FormControl('mecanicien', [Validators.required]),
-  });
-
-  isFieldValid(field: string) {
-    const formControl = this.form.get(field);
-    return formControl?.invalid && (formControl?.dirty || formControl?.touched);
-  }
-
-  getErrorMessage(controlName: string): string {
-    const control = this.form.get(controlName);
-    if (!control) return '';
-
-    if (control.hasError('required')) {
-      return 'Ce champ est requis';
-    }
-    return '';
-  }
-
-  submit(event: Event) {
-    event.preventDefault();
-    this.userService.registerUser(this.form.value).subscribe(() =>{
-      this.form.reset();
+  saveMechanic(mechanic: any) {
+    this.userService.createUser(mechanic).subscribe(() => {
       this.getAllMechanics();
-      this.isFormVisible = false;
       this.snackBar.openFromComponent(SnackBarComponent, {
-        data: {message: "Service creer avec success ✅", type: 'success'},
+        data: { message: "Mecanicien ajoute avec succès ✅", type: 'success' },
         duration: 3000,
         horizontalPosition: 'center',
         verticalPosition: 'top',
         panelClass: ['snackbar-bg'],
-      })
+      });
+    });
+  }
+
+  updateMechanic(id: string, mechanicData: any) {
+    this.userService.updateUser(id, mechanicData).subscribe(() => {
+      this.getAllMechanics();
+      this.snackBar.openFromComponent(SnackBarComponent, {
+        data: { message: "Mecanicien mis à jour avec succès ✅", type: 'success' },
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snackbar-bg'],
+      });
     })
   }
+
 }

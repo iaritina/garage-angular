@@ -24,13 +24,18 @@ export const navItems: NavItem[] = [
     route: '/vehicles',
   },
   {
+    displayName: 'Mecaniciens',
+    iconName: 'users',
+    route: '/mechanic'
+  },
+  {
     displayName: 'Marques',
     iconName: 'brand',
     route: '/brands-models',
   },
   {
     displayName: "Services",
-    iconName: "hommer",
+    iconName: "hammer",
     route: "/services",
   },
   // {

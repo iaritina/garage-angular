@@ -15,7 +15,6 @@ import { SnackBarComponent } from 'src/app/components/snackbar/snack-bar/snack-b
 
 @Component({
   selector: 'app-service',
-  standalone: true, // Ajouté pour éviter les erreurs d'importation
   imports: [
     MatTableModule,
     CommonModule,
@@ -72,7 +71,7 @@ export class ServiceComponent implements OnInit {
   openDialog(service: any = null): void {
     const dialogRef = this.dialog.open(ServiceFormComponent, {
       width: '400px',
-      data: { serviceData: service }
+      data: { ReserviceData: service }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -87,9 +86,7 @@ export class ServiceComponent implements OnInit {
     });
   }
 
-
   saveService(service: any) {
-    console.log("Données envoyées au backend :", service);
     this.service.createNewService(service).subscribe(() => {
       this.getAllService();
       this.snackBar.openFromComponent(SnackBarComponent, {

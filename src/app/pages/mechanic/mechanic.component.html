@@ -2,59 +2,13 @@
   <mat-card-content [ngStyle]="{ 'display': 'flex', 'flexDirection': 'column', 'flex': '1' }">
 
     <mat-card-title style="display: flex; justify-content: space-between; align-items: center;">
-      <span>{{ isFormVisible ? 'Formulaire d\' insertion mecanicien' : 'Mecaniciens' }}</span>
-      <button mat-raised-button color="primary" (click)="isFormVisible ? closeForm() : openForm()">
-        <mat-icon>{{ isFormVisible ? 'arrow_back' : 'add' }}</mat-icon>
-        {{ isFormVisible ? 'Retour' : 'Ajouter' }}
+      <span>Mecaniciens</span>
+      <button mat-raised-button color="primary" (click)="openDialog()">
+        <mat-icon>add</mat-icon>
+        Ajouter
       </button>
     </mat-card-title>
 
-
-    @if(isFormVisible) {
-      <form class="m-t-30" [formGroup]="form" (submit)="submit($event)">
-        <div class="form-row">
-          <div class="form-column">
-            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Nom</mat-label>
-            <mat-form-field appearance="outline" class="w-100" color="primary">
-              <input matInput name="firstname" formControlName="firstname" />
-              <mat-error *ngIf="isFieldValid('firstname')">{{ getErrorMessage('firstname') }}</mat-error>
-            </mat-form-field>
-          </div>
-
-          <div class="form-column">
-            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Prénom</mat-label>
-            <mat-form-field appearance="outline" class="w-100" color="primary">
-              <input matInput name="lastname" formControlName="lastname" />
-              <mat-error *ngIf="isFieldValid('lastname')">{{ getErrorMessage('lastname') }}</mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-column">
-            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Email</mat-label>
-            <mat-form-field appearance="outline" class="w-100" color="primary">
-              <input matInput name="email" formControlName="email" type="email" />
-              <mat-error *ngIf="isFieldValid('email')">{{ getErrorMessage('email') }}</mat-error>
-            </mat-form-field>
-          </div>
-
-          <div class="form-column">
-            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Téléphone</mat-label>
-            <mat-form-field appearance="outline" class="w-100" color="primary">
-              <input matInput name="phone" formControlName="phone" type="tel" />
-              <mat-error *ngIf="isFieldValid('phone')">{{ getErrorMessage('phone') }}</mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-
-        <button mat-flat-button color="primary" class="w-100">Ajouter</button>
-      </form>
-
-
-    }
-
-    @else {
       <div class="table-wrapper" [ngStyle]="{ 'flex': '1', 'display': 'flex', 'flexDirection': 'column' }">
         <!-- Table with fixed height and scroll for data -->
         <div class="table-responsive" [ngStyle]="{ 'flex': '1', 'overflow-y': 'auto', 'max-height': '70vh' }">
@@ -88,10 +42,17 @@
               <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">Specialites</th>
               <td mat-cell *matCellDef="let element">
                 <h6 class="f-s-16 m-b-4">
-                  <span class="text-dark f-w-600">{{ element.specialities }}</span>
+                  <span class="text-dark f-w-600">
+                    @for(speciality of element.specialities;track speciality) {
+                      <mat-chip >
+                        {{ speciality.name }}
+                      </mat-chip>
+                    }
+                  </span>
                 </h6>
               </td>
             </ng-container>
+
 
             <!-- Colonne Actions -->
             <ng-container matColumnDef="actions">
@@ -101,7 +62,7 @@
                   <mat-icon>more_horiz</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-                  <button mat-menu-item>
+                  <button mat-menu-item (click)="openDialog(element)">
                     <mat-icon [ngStyle]="{ color: 'blue' }">edit</mat-icon>
                     <span>Modifier</span>
                   </button>
@@ -124,9 +85,5 @@
           [ngStyle]="{ 'margin-top': 'auto' }">
         </mat-paginator>
       </div>
-    }
-
-
-
   </mat-card-content>
 </mat-card>
