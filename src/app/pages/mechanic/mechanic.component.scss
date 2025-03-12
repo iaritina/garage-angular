@@ -6,6 +6,11 @@
   .form-column {
     flex: 1;
     min-width: 300px;
-    max-width: 48%; 
+    max-width: 48%;
   }
+}
+
+mat-chip {
+  margin-right: 8px;
+  margin-bottom: 4px; 
 }

@@ -1,0 +1,116 @@
+<mat-dialog-content>
+  <h2 mat-dialog-title>{{ mechanicData ? 'Modifier' : 'Ajouter' }} un mécanicien</h2>
+  <form [formGroup]="form" (submit)="submit($event)">
+    <div class="grid-container">
+      <!-- Nom -->
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Nom</mat-label>
+        <input matInput formControlName="firstname" required>
+        @if(form.controls['firstname'].hasError('required')) {
+          <mat-error >
+
+          </mat-error>
+        }
+
+      </mat-form-field>
+
+      <!-- Prénom -->
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Prénom</mat-label>
+        <input matInput formControlName="lastname" required>
+        @if(form.controls['lastname'].hasError('required')) {
+          <mat-error >
+
+          </mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Email -->
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" required>
+      @if(form.controls['email'].hasError('required')) {
+        <mat-error>
+
+        </mat-error>
+      }
+
+      @if(form.controls['email'].hasError('email')) {
+        <mat-error >
+         
+        </mat-error>
+      }
+
+    </mat-form-field>
+
+    <!-- Téléphone -->
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Téléphone</mat-label>
+      <mat-chip-grid #chipGrid aria-label="Ajouter des numéros de téléphone">
+        @for (phone of phones; track phone) {
+          <mat-chip-row
+            (removed)="removePhone(phone)"
+            [editable]="true"
+            (edited)="editPhone(phone, $event)"
+            [aria-description]="'Appuyez sur entrée pour modifier ' + phone"
+          >
+            {{ phone }}
+            <button matChipRemove [attr.aria-label]="'Supprimer ' + phone">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        }
+        <input
+          name="phone"
+          placeholder="Nouveau numéro..."
+          [matChipInputFor]="chipGrid"
+          [matChipInputAddOnBlur]="addOnBlur"
+          (input)="validateAndAddPhone($event)"
+          (blur)="validateAndAddPhone($event)"
+        />
+      </mat-chip-grid>
+      @if(phoneError) {
+        <mat-error>
+          {{ phoneError }}
+        </mat-error>
+      }
+
+    </mat-form-field>
+
+    <!-- Spécialités -->
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Sélectionner des éléments</mat-label>
+      <mat-chip-grid #serviceChipGrid aria-label="Sélectionner des éléments">
+        @for (itemId of specialities; track itemId) {
+          <mat-chip-row (removed)="removeItem(itemId)">
+            {{ getSpecialityNameById(itemId) }}
+            <button matChipRemove [attr.aria-label]="'Supprimer ' + itemId">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        }
+        <input
+          name="specialities"
+          formControlName="specialities"
+          placeholder="Rechercher un élément..."
+          [matChipInputFor]="serviceChipGrid"
+          [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="addItem($event)"
+          [matAutocomplete]="auto"
+        />
+      </mat-chip-grid>
+
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onItemSelected($event)">
+        @for (item of service; track item) {
+          <mat-option [value]="item">{{ item.name }}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">Annuler</button>
+  <button mat-raised-button color="primary" (click)="submit($event)">Enregistrer</button>
+</mat-dialog-actions>
