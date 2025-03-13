@@ -29,6 +29,7 @@ export class ServiceFormComponent implements OnChanges {
   form = new FormGroup({
     name: new FormControl('', [Validators.required]),
     current_price: new FormControl('', [Validators.required]),
+    commission: new FormControl('',[Validators.required]),
     next_service_km: new FormControl('', [Validators.required]),
     duration: new FormControl('', [Validators.required]),
   });

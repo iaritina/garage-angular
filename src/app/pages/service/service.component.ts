@@ -29,7 +29,7 @@ import { SnackBarComponent } from 'src/app/components/snackbar/snack-bar/snack-b
 })
 export class ServiceComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  displayedColumns1: string[] = ['name', 'price', 'duration', 'actions'];
+  displayedColumns1: string[] = ['name', 'price','commission','duration', 'actions'];
   dataSource1: MatTableDataSource<any> = new MatTableDataSource();
 
   constructor(
