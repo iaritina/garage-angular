@@ -1,0 +1,149 @@
+<mat-card class="cardWithShadow productcard overflow-hidden">
+  <mat-card-header>
+    <mat-card-title class="m-b-0">Prendre un rendez-vous</mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="b-t-1" fxLayout="row" fxLayoutAlign="center center">
+    <div class="clock-container">
+      <mat-card appearance="outlined" class="clock">
+        <mat-card-content class="b-t-1">
+          <h3 class="date-text">{{ current_date | date : "fullDate" }}</h3>
+          <h2 class="hour-text">{{ current_date | date : "HH:mm:ss" }}</h2>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    @if (loading) {
+    <div class="loading-container">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+    }
+
+    <mat-stepper
+      linear
+      #stepper
+      [orientation]="(stepperOrientation | async)!"
+      class="custom-stepper"
+    >
+      <mat-step [stepControl]="firstFormGroup" label="Prestations">
+        <form [formGroup]="firstFormGroup">
+          <div class="prestation-tab">
+            <mat-table [dataSource]="prestations" class="mat-elevation-z8">
+              <!--- Note that these columns can be defined in any order.
+                      The actual rendered columns are set as a property on the row definition" -->
+              <ng-container matColumnDef="choose" formArrayName="prestations">
+                <mat-header-cell *matHeaderCellDef> Choisir </mat-header-cell>
+                <mat-cell *matCellDef="let element; let i = index">
+                  <mat-checkbox
+                    [formControlName]="i"
+                    class="example-margin"
+                  ></mat-checkbox>
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef> Services </mat-header-cell>
+                <mat-cell *matCellDef="let element" class="prestations-name">
+                  {{ element.name }}
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="current_price">
+                <mat-header-cell *matHeaderCellDef class="action-header">
+                  Prix
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element"
+                  >{{ element.current_price }}
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="duration">
+                <mat-header-cell *matHeaderCellDef class="action-header">
+                  Duree
+                </mat-header-cell>
+                <mat-cell *matCellDef="let element"
+                  >{{ element.duration }}
+                </mat-cell>
+              </ng-container>
+
+              <mat-header-row
+                *matHeaderRowDef="displayedColumns"
+              ></mat-header-row>
+              <mat-row
+                *matRowDef="let row; columns: displayedColumns"
+              ></mat-row>
+            </mat-table>
+          </div>
+
+          <div class="btn-next-previous">
+            <button
+              mat-button
+              matStepperNext
+              [disabled]="firstFormGroup.invalid"
+              (click)="onNext()"
+            >
+              Next
+            </button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step label="Date & Mécano" [formGroup]="secondFormGroup">
+        <div class="icon-text-container">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="Example home icon"
+            fontIcon="info"
+          ></mat-icon>
+          <p class="info">
+            Veuillez choisir une date et une heure pour vérifier la
+            disponibilité des mécaniciens
+          </p>
+        </div>
+        <form [formGroup]="secondFormGroup">
+          <div class="form-grid">
+            <div class="date-picker-pers">
+              <mat-form-field class="aptDate">
+                <mat-label>Date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="datepicker"
+                  formControlName="aptDate"
+                />
+                <mat-datepicker #datepicker />
+                <mat-datepicker-toggle [for]="datepicker" matSuffix />
+              </mat-form-field>
+
+              <mat-form-field class="aptTime">
+                <mat-label>Heure</mat-label>
+                <input
+                  matInput
+                  [matTimepicker]="timepicker"
+                  formControlName="aptTime"
+                />
+                <mat-timepicker #timepicker />
+                <mat-timepicker-toggle [for]="timepicker" matSuffix />
+              </mat-form-field>
+            </div>
+
+            <div class="btn-verifier">
+              <button
+                mat-flat-button
+                color="primary"
+                class="m-r-8 btn-verifier"
+              >
+                Verifier
+              </button>
+            </div>
+          </div>
+          <div class="btn-next-previous">
+            <button mat-button matStepperPrevious>Précédent</button>
+            <button mat-button matStepperNext>Suivant</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Valider</ng-template>
+        <p>You are now done.</p>
+        <div>
+          <button mat-button matStepperPrevious>Précédent</button>
+          <button mat-button (click)="stepper.reset()">Réinitialiser</button>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </mat-card-content>
+</mat-card>

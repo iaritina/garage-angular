@@ -19,6 +19,11 @@ export const navItems: NavItem[] = [
   //   route: '/appointments',
   // },
   {
+    displayName: 'Réserver',
+    iconName: 'clock',
+    route: '/make-appointment',
+  },
+  {
     displayName: 'Vehicules',
     iconName: 'car',
     route: '/vehicles',
@@ -26,7 +31,7 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Mecaniciens',
     iconName: 'users',
-    route: '/mechanic'
+    route: '/mechanic',
   },
   {
     displayName: 'Marques',
@@ -34,9 +39,9 @@ export const navItems: NavItem[] = [
     route: '/brands-models',
   },
   {
-    displayName: "Services",
-    iconName: "hammer",
-    route: "/services",
+    displayName: 'Services',
+    iconName: 'hammer',
+    route: '/services',
   },
   // {
   //   displayName: 'Badge',

@@ -7,6 +7,7 @@ import { MechanicComponent } from './pages/mechanic/mechanic.component';
 import { ServiceComponent } from './pages/service/service.component';
 import { VehicleFormComponent } from './pages/vehicle/vehicle-form/vehicle-form.component';
 import { VehicleComponent } from './pages/vehicle/vehicle.component';
+import { MakeAppointmentComponent } from './pages/make-appointment/make-appointment.component';
 
 export const routes: Routes = [
   {
@@ -17,6 +18,11 @@ export const routes: Routes = [
       {
         path: 'vehicles',
         component: VehicleComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'make-appointment',
+        component: MakeAppointmentComponent,
         canActivate: [AuthGuard],
       },
       {
