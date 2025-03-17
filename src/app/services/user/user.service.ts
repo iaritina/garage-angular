@@ -44,11 +44,14 @@ export class UserService {
   }
 
   createUser(user: any): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/users/mechanicRegistration`,user);
+    return this.http.post(
+      `${environment.apiUrl}/users/mechanicRegistration`,
+      user
+    );
   }
 
   updateUser(id: string, user: any): Observable<any> {
-    return this.http.put<any>(`${environment.apiUrl}/users/${id}`,user);
+    return this.http.put<any>(`${environment.apiUrl}/users/${id}`, user);
   }
 
   deleteUser(id: string) {
@@ -57,5 +60,9 @@ export class UserService {
 
   getUserByEmail(email: string): Observable<IUser> {
     return this.http.get<IUser>(`${environment.apiUrl}/users/client/${email}`);
+  }
+
+  getMechanics(): Observable<IUser[]> {
+    return this.http.get<IUser[]>(`${environment.apiUrl}/users/mechanics`);
   }
 }

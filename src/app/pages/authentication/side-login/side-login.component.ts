@@ -10,6 +10,7 @@ import { VehicleService } from 'src/app/services/vehicle/vehicle.service';
 
 export interface IUser {
   _id: string;
+  firstname: string;
   email: string;
 }
 @Component({
