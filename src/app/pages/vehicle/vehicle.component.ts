@@ -108,7 +108,7 @@ export class VehicleComponent implements OnInit {
     this.vehicleService.saveClientVehicle(vehicle).subscribe(() => {
       this.getVehicleByUser();
       this.snackBar.openFromComponent(SnackBarComponent, {
-          data: { message: "Service mis à jour avec succès ✅", type: 'success' },
+          data: { message: "Vehicule creer avec succès ✅", type: 'success' },
           duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'top',

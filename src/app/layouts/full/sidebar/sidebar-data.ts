@@ -39,6 +39,11 @@ export const navItems: NavItem[] = [
     route: '/brands-models',
   },
   {
+    displayName: 'Produits',
+    iconName: 'product',
+    route: '/products'
+  },
+  {
     displayName: 'Services',
     iconName: 'hammer',
     route: '/services',
