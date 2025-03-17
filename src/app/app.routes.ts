@@ -8,6 +8,7 @@ import { ServiceComponent } from './pages/service/service.component';
 import { VehicleFormComponent } from './pages/vehicle/vehicle-form/vehicle-form.component';
 import { VehicleComponent } from './pages/vehicle/vehicle.component';
 import { MakeAppointmentComponent } from './pages/make-appointment/make-appointment.component';
+import { ProductComponent } from './pages/product/product.component';
 
 export const routes: Routes = [
   {
@@ -35,6 +36,11 @@ export const routes: Routes = [
       //   component: AppointmentListComponent,
       //   canActivate: [AuthGuard],
       // },
+      {
+        path: 'products',
+        component: ProductComponent,
+        canActivate: [AuthGuard],
+      },
       {
         path: 'services',
         component: ServiceComponent,
