@@ -7,12 +7,13 @@ import { CoreService } from 'src/app/services/core.service';
   template: `
     <a href="/" class="logodark">
       <img
-        src="./assets/images/logos/dark-logo.svg"
-        class="align-middle m-2"
+        src="./assets/images/logos/garage.svg"
+        class="m-2 logo-brand"
         alt="logo"
       />
     </a>
   `,
+  styleUrl: './style.scss',
 })
 export class BrandingComponent {
   options = this.settings.getOptions();

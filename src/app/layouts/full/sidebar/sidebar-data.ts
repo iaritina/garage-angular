@@ -35,13 +35,13 @@ export const navItems: NavItem[] = [
   },
   {
     displayName: 'Marques',
-    iconName: 'brand',
+    iconName: 'brand-volkswagen',
     route: '/brands-models',
   },
   {
     displayName: 'Produits',
-    iconName: 'product',
-    route: '/products'
+    iconName: 'car-turbine',
+    route: '/products',
   },
   {
     displayName: 'Services',
