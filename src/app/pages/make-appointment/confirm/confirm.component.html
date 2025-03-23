@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>Voulez-vous confirmer votre réservation ?</h2>
+<mat-dialog-content>
+  <p>Une fois confirmée, vous recevrez un e-mail avec les détails.</p>
+
+  <p class="fixedDate">
+    Réservation confirmée pour le {{ data.date | date : "fullDate" }}.
+  </p>
+  <p class="car">
+    Voiture: {{ data.car.model.brand.name }} {{ data.car.model.name }}
+  </p>
+  <p class="mechanic">
+    Mecanicien: <span>{{ data.mechanic.firstname }}</span>
+  </p>
+
+  <div class="confirm-reservation">
+    <table mat-table [dataSource]="data.prestations" class="mat-elevation-z8">
+      <ng-container matColumnDef="prestation">
+        <th mat-header-cell *matHeaderCellDef>Service</th>
+        <td mat-cell *matCellDef="let prestation">{{ prestation.name }}</td>
+        <td mat-footer-cell *matFooterCellDef>Total</td>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>Main-d'œuvre</th>
+        <td mat-cell *matCellDef="let prestation">
+          {{
+            prestation.current_price
+              | currency : "MGA" : "symbol" : "1.0-2" : "fr-FR"
+          }}
+        </td>
+        <td mat-footer-cell *matFooterCellDef>
+          {{ data.total | currency : "MGA" : "symbol" : "1.0-2" : "fr-FR" }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+    </table>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Annuler</button>
+  <button mat-button cdkFocusInitial (click)="confirmAppointment('confirmed')">
+    Confirmer
+  </button>
+</mat-dialog-actions>

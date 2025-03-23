@@ -1,21 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import {
-  AbstractControl,
   FormArray,
   FormBuilder,
   FormsModule,
   ReactiveFormsModule,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import {
-  MatStepperModule,
-  StepperOrientation,
-} from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { ServiceService } from 'src/app/services/service/service.service';
 import { IUser } from '../authentication/side-login/side-login.component';
@@ -24,19 +18,31 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTimepickerModule } from '@angular/material/timepicker';
-import { provideNativeDateAdapter } from '@angular/material/core';
+import {
+  MAT_DATE_LOCALE,
+  MatOption,
+  provideNativeDateAdapter,
+} from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { map, Observable } from 'rxjs';
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MinutesToHours } from './minutesToHours';
+import { AppointmentService } from 'src/app/services/appointment/appointment.service';
+import { MatSelect } from '@angular/material/select';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmComponent } from './confirm/confirm.component';
+import { Token } from 'src/app/utils/token';
+import { VehicleService } from 'src/app/services/vehicle/vehicle.service';
 @Component({
   selector: 'app-make-appointment',
-  providers: [provideNativeDateAdapter()],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'fr-Fr' },
+    provideNativeDateAdapter(),
+  ],
   imports: [
     CommonModule,
     MatCardModule,
     MatTableModule,
-    MatStepperModule,
     MatButtonModule,
     MatCheckboxModule,
     FormsModule,
@@ -47,111 +53,173 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatTimepickerModule,
     MatIconModule,
     MatProgressBarModule,
+    MatGridListModule,
+    MinutesToHours,
+    MatSelect,
+    MatOption,
   ],
   templateUrl: './make-appointment.component.html',
   styleUrl: './make-appointment.component.scss',
 })
-export class MakeAppointmentComponent implements OnInit, OnDestroy {
-  value: Date; //date
-
-  isLinear = true;
+export class MakeAppointmentComponent implements OnInit {
+  readonly dialog = inject(MatDialog);
   loading: boolean = false;
 
-  private _formBuilder = inject(FormBuilder);
-
-  firstFormGroup = this._formBuilder.group({
-    prestations: this._formBuilder.array([], this.minSelectedCheckboxes(1)),
-  });
-
-  secondFormGroup = this._formBuilder.group({
-    mechanics: this._formBuilder.array([]),
-    aptDate: ['', Validators.required], // Contrôle pour la date
-    aptTime: ['', Validators.required],
-  });
+  //date sans dimanche
+  myFilter = (d: Date | null): boolean => {
+    const day = (d || new Date()).getDay();
+    return day !== 0;
+  };
 
   ngOnInit(): void {
     this.loadPrestations();
-    this.loadMechanics();
-    this.updateCurrentDateTime();
-    this.checkBreakpoint();
-  }
-
-  ngOnDestroy(): void {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
-  }
-
-  get prestationsFormArray(): FormArray {
-    return this.firstFormGroup.get('prestations') as FormArray;
+    this.getClientVehicle();
   }
 
   displayedColumns: string[] = ['choose', 'name', 'duration', 'current_price'];
   current_date = new Date();
   private prestationService = inject(ServiceService);
+  private appointmentService = inject(AppointmentService);
   prestations: any[] = [];
-  private intervalId: any;
   mechanics: IUser[] = [];
-  private userService = inject(UserService);
+  vehicle: string = '';
+  private vehicleService = inject(VehicleService);
+
+  private _token = inject(Token);
+  private TOKEN = localStorage.getItem('token');
+
+  private _formBuilder = inject(FormBuilder);
+
+  //dialog
+  openDialog(): void {
+    const selectedPrestations = this.getSelectedPrestations();
+    const totalPrice = this.getTotalPrice();
+    const fixedDate = this.form.value?.date;
+    const mechanic = this.getSelectedMechanic();
+    this.dialog.open(ConfirmComponent, {
+      data: {
+        prestations: selectedPrestations,
+        total: totalPrice,
+        date: fixedDate,
+        mechanic: mechanic,
+        car: this.vehicle,
+        save: (value: any) => this.saveAppointment(value),
+      },
+    });
+  }
+
+  form = this._formBuilder.group({
+    prestations: this._formBuilder.array([]),
+    date: [null, Validators.required],
+    mechanic: ['', Validators.required],
+  });
+
+  getClientVehicle() {
+    const client = this._token.getUserFromToken(this.TOKEN);
+    this.vehicleService.getVehicleByUser(client).subscribe((vehicle) => {
+      this.vehicle = vehicle;
+    });
+  }
+
+  saveAppointment(value: string): void {
+    const selectedPrestations = this.getSelectedPrestations();
+    const selectedMechanic = this.getSelectedMechanic();
+    const selectedDate = this.form.value?.date;
+
+    if (!selectedDate || !selectedPrestations.length) return;
+
+    const dateUTC = new Date(selectedDate);
+    dateUTC.setHours(12, 0, 0, 0);
+
+    if (value === 'confirmed') {
+      const prestationsFormatted = selectedPrestations.map((prestation) => ({
+        service: prestation._id,
+        price: prestation.current_price,
+      }));
+
+      this.appointmentService
+        .createApt({
+          vehicle: this.vehicle,
+          prestations: prestationsFormatted,
+          date: dateUTC.toISOString(),
+          mechanic: selectedMechanic,
+        })
+        .subscribe((response) => {
+          console.log('Rendez-vous enregistré avec succès', response);
+        });
+    }
+  }
+
+  isAnyPrestationSelected(): boolean {
+    const prestationsArray = this.form.get('prestations') as FormArray;
+    return prestationsArray.controls.some((control) => control.value === true); // Vérifie si une prestation est sélectionnée
+  }
+
+  getSelectedPrestations(): {
+    _id: string;
+    name: string;
+    current_price: number;
+  }[] {
+    const prestationsArray = this.form.get('prestations') as FormArray;
+
+    // Récupérer les IDs des prestations sélectionnées
+    return this.prestations
+      .filter((_, index) => prestationsArray.at(index).value === true)
+      .map((prestation) => ({
+        _id: prestation._id,
+        name: prestation.name,
+        current_price: prestation.current_price,
+      }));
+  }
+
+  getTotalPrice(): number {
+    return this.getSelectedPrestations().reduce(
+      (sum, prestation) => sum + prestation.current_price,
+      0
+    );
+  }
 
   loadPrestations(): void {
     this.loading = true;
     this.prestationService.getAllService().subscribe((data) => {
       this.prestations = data;
-      this.initPrestationsFormArray();
       this.loading = false;
+
+      const prestationsArray = this.form.get('prestations') as FormArray;
+      prestationsArray.clear();
+
+      this.prestations.forEach(() => {
+        prestationsArray.push(this._formBuilder.control(false));
+      });
     });
   }
-
-  loadMechanics(): void {
-    this.loading = true;
-    this.userService.getMechanics().subscribe((data) => {
-      this.mechanics = data;
-      this.loading = false;
-    });
-  }
-
-  initPrestationsFormArray(): void {
-    this.prestations.forEach(() => {
-      this.prestationsFormArray.push(this._formBuilder.control(false));
-    });
-  }
-
-  getSelectedPrestations(): any[] {
-    return this.prestations.filter(
-      (_, index) => this.prestationsFormArray.at(index).value
+  getSelectedMechanic(): any {
+    return this.mechanics.find(
+      (m) => m._id === this.form.get('mechanic')?.value
     );
   }
 
-  onNext(): void {
+  loadAvailableMechanics() {
+    this.loading = true;
+
     const selectedPrestations = this.getSelectedPrestations();
-    console.log('Prestations sélectionnées :', selectedPrestations);
-  }
+    const selectedDate = this.form.get('date')?.value;
 
-  updateCurrentDateTime(): void {
-    this.intervalId = setInterval(() => {
-      this.current_date = new Date();
-    }, 1000);
-  }
-  minSelectedCheckboxes(min: number) {
-    const validator: Validators = (
-      formArray: AbstractControl
-    ): ValidationErrors | null => {
-      const totalSelected = formArray.value.reduce(
-        (prev: number, next: boolean) => (next ? prev + 1 : prev),
-        0
-      );
-      return totalSelected >= min ? null : { required: true };
+    if (!selectedPrestations.length || !selectedDate) {
+      this.loading = false;
+      return;
+    }
+
+    const requestData = {
+      prestations: selectedPrestations,
+      date: selectedDate,
     };
-    return validator;
-  }
 
-  stepperOrientation: Observable<StepperOrientation>;
-  private breakpointObserver = inject(BreakpointObserver);
-
-  checkBreakpoint() {
-    this.stepperOrientation = this.breakpointObserver
-      .observe('(min-width: 800px)')
-      .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
+    this.appointmentService
+      .getAvailableMecanics(requestData)
+      .subscribe((mechanics) => {
+        this.mechanics = mechanics;
+        this.loading = false;
+      });
   }
 }
