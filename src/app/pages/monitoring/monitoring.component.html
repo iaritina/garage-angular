@@ -1,0 +1,64 @@
+<mat-card class="cardWithShadow theme-card">
+    <mat-card-header class="d-flex justify-content-between align-items-center">
+      <mat-card-title class="m-b-0">Monitoring</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="b-t-1">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="table-container">
+            <mat-table [dataSource]="paginatedData" class="mat-elevation-z8 fixed-size-table">
+  
+              <ng-container matColumnDef="marque">
+                <mat-header-cell *matHeaderCellDef> Marque </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{ element.brand }} </mat-cell>
+              </ng-container>
+  
+              <ng-container matColumnDef="modele">
+                <mat-header-cell *matHeaderCellDef> Modèle </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{ element.model }} </mat-cell>
+              </ng-container>
+  
+              <ng-container matColumnDef="service">
+                <mat-header-cell *matHeaderCellDef> Service </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{ element.serviceName}} </mat-cell>
+              </ng-container>
+  
+              <ng-container matColumnDef="mecanicien">
+                <mat-header-cell *matHeaderCellDef> Mecanicien </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{ element.mechanic }} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <div [ngClass]="{
+                      'status-pending': element.status === false,
+                      'status-completed': element.status === true
+                    }" class="status-box">
+                    @if(element.status === false) {
+                      <mat-icon>access_time</mat-icon>
+                      <span>En cours</span>
+                    }
+                    @else {
+                      <mat-icon>check_circle</mat-icon>
+                      <span>Terminé</span>
+                    }
+                  </div>
+                </mat-cell>
+              </ng-container>
+              
+  
+  
+              <mat-header-row *matHeaderRowDef="['marque', 'modele', 'service', 'mecanicien','status']"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: ['marque', 'modele', 'service', 'mecanicien','status'];"></mat-row>
+  
+            </mat-table>
+  
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+          </div>
+        </div>
+      </div>
+  
+    </mat-card-content>
+  </mat-card>
+  
