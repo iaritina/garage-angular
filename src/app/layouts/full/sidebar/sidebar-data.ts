@@ -9,6 +9,11 @@ export const navItems: NavItem[] = [
     iconName: 'layout-grid-add',
     route: '/dashboard',
   },
+  {
+    displayName: 'Suivi des taches',
+    iconName: 'hammer',
+    route: '/tracking',
+  },
 
   {
     navCap: 'Navigations',

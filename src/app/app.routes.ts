@@ -9,6 +9,7 @@ import { VehicleFormComponent } from './pages/vehicle/vehicle-form/vehicle-form.
 import { VehicleComponent } from './pages/vehicle/vehicle.component';
 import { MakeAppointmentComponent } from './pages/make-appointment/make-appointment.component';
 import { ProductComponent } from './pages/product/product.component';
+import { MonitoringComponent } from './pages/monitoring/monitoring.component';
 
 export const routes: Routes = [
   {
@@ -16,6 +17,11 @@ export const routes: Routes = [
     component: FullComponent,
     children: [
       { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+      {
+        path: 'tracking',
+        component: MonitoringComponent,
+        canActivate: [AuthGuard],
+      },
       {
         path: 'vehicles',
         component: VehicleComponent,
