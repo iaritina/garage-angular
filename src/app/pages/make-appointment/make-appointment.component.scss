@@ -1,29 +1,5 @@
 @use "src/assets/scss/_variables" as *;
 
-@media (max-width: 600px) {
-  .icon-text-container {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .icon-text-container mat-icon {
-    margin-top: 5px;
-    font-size: 20px;
-  }
-
-  .icon-text-container .info {
-    font-size: 12px;
-  }
-  .aptDate,
-  .aptTime {
-    width: 90%;
-  }
-  .date-picker-pers {
-    flex-direction: column;
-    gap: 8px;
-  }
-}
-
 .prestation-tab {
   width: 100%;
   overflow-x: auto;
@@ -32,14 +8,8 @@ mat-table {
   min-width: 600px;
 }
 
-.clock-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .clock {
-  max-width: 300px;
+  max-width: 320px;
   display: flex;
   align-content: center;
   background-color: var(--mat-sys-primary);
@@ -71,18 +41,67 @@ mat-table {
 .icon-text-container {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 2px;
   flex-wrap: wrap;
   max-width: 100%;
   margin-bottom: 10px;
 }
 
 .icon-text-container mat-icon {
-  font-size: 24px;
+  margin-left: 10px;
+  font-size: 20px;
 }
 
 .icon-text-container .info {
-  font-size: 14px;
+  font-size: 13px;
   margin: 0;
   word-break: break-word;
+}
+
+fieldset {
+  border: 2px solid var(--mat-sys-primary);
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #f8f9fa;
+  padding-bottom: 10px;
+}
+
+legend {
+  font-size: 15px;
+  font-weight: bold;
+  color: $white;
+  padding: 5px 10px;
+  background: var(--mat-sys-primary);
+  border-radius: 5px;
+}
+
+.date-time-picker {
+  display: flex;
+  gap: 16px;
+  margin-top: 5px;
+  flex-wrap: wrap;
+}
+.date-time-picker .btn-container {
+  display: flex;
+  align-items: end;
+  height: 100%;
+}
+.date-time-picker .btn-verifier {
+  width: 150px;
+  background: var(--mat-sys-primary);
+  color: $white;
+  white-space: nowrap;
+}
+.date-time-picker .btn-verifier span {
+  font-size: 15px;
+}
+
+.select-mecano {
+  width: 400px;
+}
+
+@media screen and (max-width: 768px) {
+  .select-mecano {
+    width: 100%;
+  }
 }

@@ -1,0 +1,22 @@
+@use "src/assets/scss/_variables" as *;
+
+h2 {
+  background-color: var(--mat-sys-primary);
+}
+
+.prestation-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.price {
+  margin-left: auto;
+  font-weight: bold;
+}
+
+.fixedDate,
+.mechanic {
+  font-weight: bold;
+}

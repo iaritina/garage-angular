@@ -26,6 +26,9 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 //Import all material modules
 import { MaterialModule } from './material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { registerLocaleData } from '@angular/common';
+
+import localeFr from '@angular/common/locales/fr';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -54,3 +57,5 @@ export const appConfig: ApplicationConfig = {
 export const AppName = {
   title: 'Garage',
 };
+
+registerLocaleData(localeFr);
