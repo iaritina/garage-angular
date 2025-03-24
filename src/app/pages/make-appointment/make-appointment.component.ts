@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -13,7 +13,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableModule } from '@angular/material/table';
 import { ServiceService } from 'src/app/services/service/service.service';
 import { IUser } from '../authentication/side-login/side-login.component';
-import { UserService } from 'src/app/services/user/user.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -33,6 +32,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmComponent } from './confirm/confirm.component';
 import { Token } from 'src/app/utils/token';
 import { VehicleService } from 'src/app/services/vehicle/vehicle.service';
+import { ProductService } from 'src/app/services/product/product.service';
 @Component({
   selector: 'app-make-appointment',
   providers: [
@@ -82,8 +82,12 @@ export class MakeAppointmentComponent implements OnInit {
   private appointmentService = inject(AppointmentService);
   prestations: any[] = [];
   mechanics: IUser[] = [];
-  vehicle: string = '';
+  vehicles: any[] = [];
   private vehicleService = inject(VehicleService);
+  private productService = inject(ProductService);
+  products: any[] = [];
+
+  vehicle = {};
 
   private _token = inject(Token);
   private TOKEN = localStorage.getItem('token');
@@ -96,20 +100,34 @@ export class MakeAppointmentComponent implements OnInit {
     const totalPrice = this.getTotalPrice();
     const fixedDate = this.form.value?.date;
     const mechanic = this.getSelectedMechanic();
-    this.dialog.open(ConfirmComponent, {
-      data: {
-        prestations: selectedPrestations,
-        total: totalPrice,
-        date: fixedDate,
-        mechanic: mechanic,
-        car: this.vehicle,
-        save: (value: any) => this.saveAppointment(value),
-      },
-    });
+    this.getConcernedProducts();
+
+    const selectedVehicle = this.form.value.vehicle;
+    if (selectedVehicle) {
+      this.vehicleService.getVehicleById(selectedVehicle).subscribe((data) => {
+        this.vehicle = data.model;
+
+        // Ouvrir le dialog après avoir récupéré le véhicule
+        this.dialog.open(ConfirmComponent, {
+          data: {
+            prestations: selectedPrestations,
+            total: totalPrice,
+            date: fixedDate,
+            mechanic: mechanic,
+            car: this.vehicle,
+            prod: this.products,
+            save: (value: any) => this.saveAppointment(value),
+          },
+        });
+      });
+    } else {
+      console.error('Aucun véhicule sélectionné');
+    }
   }
 
   form = this._formBuilder.group({
     prestations: this._formBuilder.array([]),
+    vehicle: ['', Validators.required],
     date: [null, Validators.required],
     mechanic: ['', Validators.required],
   });
@@ -117,7 +135,7 @@ export class MakeAppointmentComponent implements OnInit {
   getClientVehicle() {
     const client = this._token.getUserFromToken(this.TOKEN);
     this.vehicleService.getVehicleByUser(client).subscribe((vehicle) => {
-      this.vehicle = vehicle;
+      this.vehicles = vehicle;
     });
   }
 
@@ -125,6 +143,7 @@ export class MakeAppointmentComponent implements OnInit {
     const selectedPrestations = this.getSelectedPrestations();
     const selectedMechanic = this.getSelectedMechanic();
     const selectedDate = this.form.value?.date;
+    const selectedVehicle = this.form.value?.vehicle;
 
     if (!selectedDate || !selectedPrestations.length) return;
 
@@ -139,7 +158,7 @@ export class MakeAppointmentComponent implements OnInit {
 
       this.appointmentService
         .createApt({
-          vehicle: this.vehicle,
+          vehicle: selectedVehicle,
           prestations: prestationsFormatted,
           date: dateUTC.toISOString(),
           mechanic: selectedMechanic,
@@ -153,6 +172,19 @@ export class MakeAppointmentComponent implements OnInit {
   isAnyPrestationSelected(): boolean {
     const prestationsArray = this.form.get('prestations') as FormArray;
     return prestationsArray.controls.some((control) => control.value === true); // Vérifie si une prestation est sélectionnée
+  }
+
+  getConcernedProducts() {
+    const selectedPrestations = this.getSelectedPrestations();
+
+    const prestationIds = selectedPrestations.map((p: any) => p?._id || p?.id);
+
+    this.productService
+      .getProductsByServices(prestationIds)
+      .subscribe((products) => {
+        this.products = products;
+        console.log(this.products);
+      });
   }
 
   getSelectedPrestations(): {
