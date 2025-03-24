@@ -37,24 +37,25 @@
               </td>
             </ng-container>
 
-            <!-- Colonne Price -->
-            <ng-container matColumnDef="specialities">
-              <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">Specialites</th>
-              <td mat-cell *matCellDef="let element">
-                <h6 class="f-s-16 m-b-4">
-                  <span class="text-dark f-w-600">
-                    @for(speciality of element.specialities;track speciality) {
-                      <mat-chip >
-                        {{ speciality.name }}
+            <ng-container matColumnDef="phones">
+              <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14" style="padding-left: 50px;">Contact</th>
+              <td mat-cell *matCellDef="let element" class="p-l-0">
+                <div class="d-flex align-items-center">
+                  <div class="m-l-16" style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    @for (phone of element.phones || element.phone; track phone) {
+                      <mat-chip class="phone-chip">
+                        {{ phone }}
                       </mat-chip>
                     }
-                  </span>
-                </h6>
+                    @empty {
+                      <span class="no-phone">-</span>
+                    }
+                  </div>
+                </div>
               </td>
             </ng-container>
 
 
-            <!-- Colonne Actions -->
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14"></th>
               <td mat-cell *matCellDef="let element">

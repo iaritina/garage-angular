@@ -53,6 +53,11 @@ export const navItems: NavItem[] = [
     iconName: 'hammer',
     route: '/services',
   },
+  {
+    displayName: 'Mes taches',
+    iconName: 'list-check',
+    route: '/task',
+  },
   // {
   //   displayName: 'Badge',
   //   iconName: 'archive',
