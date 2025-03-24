@@ -19,6 +19,39 @@
     <form [formGroup]="form">
       <mat-card class="cardWithShadow productcard overflow-hidden">
         <mat-card-header>
+          <mat-card-title class="m-b-0">Voitures</mat-card-title>
+          <div class="icon-text-container">
+            <mat-icon
+              aria-hidden="false"
+              aria-label="Example home icon"
+              fontIcon="info"
+            ></mat-icon>
+            <p class="info">Veuillez choisir votre voiture</p>
+          </div>
+        </mat-card-header>
+        <mat-card-content
+          class="b-t-1"
+          fxLayout="row"
+          fxLayoutAlign="center center"
+        >
+          <div class="select-cars">
+            <mat-label class="f-w-600 m-b-8 d-block">Véhicule</mat-label>
+            <mat-form-field appearance="outline" class="select-vehicle">
+              <mat-select formControlName="vehicle">
+                @for (vehicle of vehicles; track vehicle._id) {
+
+                <mat-option [value]="vehicle._id">
+                  {{ vehicle.model.name }}</mat-option
+                >
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      @if (form.value.vehicle) {
+      <mat-card class="cardWithShadow productcard overflow-hidden">
+        <mat-card-header>
           <mat-card-title class="m-b-0">Prestations</mat-card-title>
           <div class="icon-text-container">
             <mat-icon
@@ -88,7 +121,7 @@
           </div>
         </mat-card-content>
       </mat-card>
-      @if (isAnyPrestationSelected()) {
+      } @if (isAnyPrestationSelected()) {
       <mat-card class="cardWithShadow productcard overflow-hidden">
         <mat-card-header>
           <mat-card-title class="m-b-0">Dates & mécanos</mat-card-title>

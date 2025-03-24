@@ -4,11 +4,10 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environments';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getAllProduct(): Observable<any[]> {
     return this.http.get<any[]>(`${environment.apiUrl}/products`);
@@ -19,15 +18,23 @@ export class ProductService {
   }
 
   saveNewProduct(product: any): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/products`,product);
+    return this.http.post<any>(`${environment.apiUrl}/products`, product);
   }
 
   deleteProduct(id: string) {
-    return this.http.put<any>(`${environment.apiUrl}/products/delete/${id}`,{});
+    return this.http.put<any>(
+      `${environment.apiUrl}/products/delete/${id}`,
+      {}
+    );
   }
 
   updateProduct(id: string, data: any) {
-    return this.http.patch<any>(`${environment.apiUrl}/products/${id}`,data);
+    return this.http.patch<any>(`${environment.apiUrl}/products/${id}`, data);
   }
 
+  getProductsByServices(prestationIds: string[]): Observable<any[]> {
+    return this.http.post<any[]>(`${environment.apiUrl}/products/services/`, {
+      prestationIds,
+    });
+  }
 }
