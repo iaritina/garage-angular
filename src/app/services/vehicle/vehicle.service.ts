@@ -10,9 +10,11 @@ export class VehicleService {
   constructor(private http: HttpClient) {}
 
   getVehicleByUser(id: string): Observable<any> {
-    return this.http.get<any>(`${environment.apiUrl}/vehicles/user/${id}`).pipe(
-      map((data: any[]) => data[0]) // Récupérer directement le premier élément du tableau
-    );
+    return this.http.get<any>(`${environment.apiUrl}/vehicles/user/${id}`);
+  }
+
+  getVehicleById(id: string): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/vehicles/${id}`);
   }
 
   saveClientVehicle(value: any): Observable<any> {

@@ -28,6 +28,7 @@ export class ConfirmComponent {
   readonly data = inject(MAT_DIALOG_DATA);
 
   displayedColumns: string[] = ['prestation', 'price'];
+  displayedColumnsProd: string[] = ['product', 'price'];
 
   confirmAppointment(value: any): void {
     this.data.save(value);
