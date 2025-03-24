@@ -64,6 +64,7 @@ export class VehicleComponent implements OnInit {
 
   ngOnInit(): void {
     this.getVehicleByUser();
+    console.log("vehicles",this.vehicles);
   }
 
   ngAfterViewInit(): void {
@@ -82,6 +83,7 @@ export class VehicleComponent implements OnInit {
   getVehicleByUser(): void {
     const token = localStorage.getItem('token');
     const userId: any = this.tokenService.getUserFromToken(token);
+    console.log("userId",userId);
     this.vehicleService.getVehicleByUser(userId).subscribe({
       next: (vehicles) => {
         this.vehicles = vehicles;

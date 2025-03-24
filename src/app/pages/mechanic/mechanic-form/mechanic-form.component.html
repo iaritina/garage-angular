@@ -77,36 +77,6 @@
       }
 
     </mat-form-field>
-
-    <!-- Spécialités -->
-    <mat-form-field appearance="outline" class="w-100">
-      <mat-label>Sélectionner des éléments</mat-label>
-      <mat-chip-grid #serviceChipGrid aria-label="Sélectionner des éléments">
-        @for (itemId of specialities; track itemId) {
-          <mat-chip-row (removed)="removeItem(itemId)">
-            {{ getSpecialityNameById(itemId) }}
-            <button matChipRemove [attr.aria-label]="'Supprimer ' + itemId">
-              <mat-icon>cancel</mat-icon>
-            </button>
-          </mat-chip-row>
-        }
-        <input
-          name="specialities"
-          formControlName="specialities"
-          placeholder="Rechercher un élément..."
-          [matChipInputFor]="serviceChipGrid"
-          [matChipInputAddOnBlur]="addOnBlur"
-          (matChipInputTokenEnd)="addItem($event)"
-          [matAutocomplete]="auto"
-        />
-      </mat-chip-grid>
-
-      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onItemSelected($event)">
-        @for (item of service; track item) {
-          <mat-option [value]="item">{{ item.name }}</mat-option>
-        }
-      </mat-autocomplete>
-    </mat-form-field>
   </form>
 </mat-dialog-content>
 

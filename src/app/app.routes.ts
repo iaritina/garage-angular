@@ -10,6 +10,7 @@ import { VehicleComponent } from './pages/vehicle/vehicle.component';
 import { MakeAppointmentComponent } from './pages/make-appointment/make-appointment.component';
 import { ProductComponent } from './pages/product/product.component';
 import { MonitoringComponent } from './pages/monitoring/monitoring.component';
+import { TaskComponent } from './pages/task/task.component';
 
 export const routes: Routes = [
   {
@@ -35,6 +36,11 @@ export const routes: Routes = [
       {
         path: 'add-vehicle',
         component: VehicleFormComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'task',
+        component: TaskComponent,
         canActivate: [AuthGuard],
       },
       // {

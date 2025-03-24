@@ -59,7 +59,6 @@ export class MonitoringComponent implements OnInit {
   getAllAppointment(): void {
     this.monitoringService.getAllAppointment().subscribe({
       next: (appointment) => {
-        console.log("appointment",appointment);
         this.data = appointment;
         this.paginatedData.data = this.data;
         this.paginatedData.paginator = this.paginator;

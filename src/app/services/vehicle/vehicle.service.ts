@@ -13,10 +13,6 @@ export class VehicleService {
     return this.http.get<any>(`${environment.apiUrl}/vehicles/user/${id}`);
   }
 
-  getVehicleById(id: string): Observable<any> {
-    return this.http.get<any>(`${environment.apiUrl}/vehicles/${id}`);
-  }
-
   saveClientVehicle(value: any): Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/vehicles/`, value);
   }

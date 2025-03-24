@@ -1,0 +1,56 @@
+<mat-card class="cardWithShadow theme-card">
+  <mat-card-header class="d-flex justify-content-between align-items-center">
+    <mat-card-title class="m-b-0">Mes taches</mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="b-t-1">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="table-container">
+          <mat-table [dataSource]="paginatedData" class="mat-elevation-z8 fixed-size-table">
+
+            <ng-container matColumnDef="marque">
+              <mat-header-cell *matHeaderCellDef> Marque </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{ element.vehicle.model.brand.name }} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="modele">
+              <mat-header-cell *matHeaderCellDef> Modèle </mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{ element.vehicle.model.name }} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="service">
+              <mat-header-cell *matHeaderCellDef> Service </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <div class="service-container">
+                  @for (prestation of element.prestations; track prestation) {
+                    <div class="service-card">
+                      {{ prestation.service.name }}
+                    </div>
+                  }
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <button mat-raised-button 
+                        color="primary" 
+                        (click)="completeTask(element)"
+                        [disabled]="element.completed">
+                  {{ element.completed ? 'Terminé' : 'Terminer' }}
+                </button>
+              </mat-cell>
+            </ng-container>
+            
+            <mat-header-row *matHeaderRowDef="['marque', 'modele', 'service', 'actions']"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: ['marque', 'modele', 'service', 'actions'];"></mat-row>
+
+          </mat-table>
+
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

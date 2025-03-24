@@ -43,7 +43,7 @@ export class MechanicComponent implements OnInit {
   ) {}
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  displayedColumns1: string[] = ['firstname', 'lastname', 'specialities', 'actions'];
+  displayedColumns1: string[] = ['firstname', 'lastname','phones','actions'];
   dataSource1: MatTableDataSource<any> = new MatTableDataSource();
 
 

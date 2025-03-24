@@ -19,4 +19,13 @@ export class AppointmentService {
       value
     );
   }
+
+  getAppointmentMechanic(mechanic: string): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/appointments/mechanic-task/${mechanic}`);
+  }
+
+  completeTask(task: string) {
+    return this.http.put<any>(`${environment.apiUrl}/appointments/complete-task/${task}`, {});
+  }
+
 }
