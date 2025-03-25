@@ -33,6 +33,8 @@ import { ConfirmComponent } from './confirm/confirm.component';
 import { Token } from 'src/app/utils/token';
 import { VehicleService } from 'src/app/services/vehicle/vehicle.service';
 import { ProductService } from 'src/app/services/product/product.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackBarComponent } from 'src/app/components/snackbar/snack-bar/snack-bar.component';
 @Component({
   selector: 'app-make-appointment',
   providers: [
@@ -64,6 +66,7 @@ import { ProductService } from 'src/app/services/product/product.service';
 export class MakeAppointmentComponent implements OnInit {
   readonly dialog = inject(MatDialog);
   loading: boolean = false;
+  minDate: Date; // validation de date
 
   //date sans dimanche
   myFilter = (d: Date | null): boolean => {
@@ -74,6 +77,7 @@ export class MakeAppointmentComponent implements OnInit {
   ngOnInit(): void {
     this.loadPrestations();
     this.getClientVehicle();
+    this.minDate = new Date(); //ne pas prendre en compte les dates antérieures
   }
 
   displayedColumns: string[] = ['choose', 'name', 'duration', 'current_price'];
@@ -93,6 +97,7 @@ export class MakeAppointmentComponent implements OnInit {
   private TOKEN = localStorage.getItem('token');
 
   private _formBuilder = inject(FormBuilder);
+  private _matSnackBar = inject(MatSnackBar);
 
   //dialog
   openDialog(): void {
@@ -132,8 +137,12 @@ export class MakeAppointmentComponent implements OnInit {
     mechanic: ['', Validators.required],
   });
 
-  getClientVehicle() {
+  getClient() {
     const client = this._token.getUserFromToken(this.TOKEN);
+    return client;
+  }
+  getClientVehicle() {
+    const client = this.getClient();
     this.vehicleService.getVehicleByUser(client).subscribe((vehicle) => {
       this.vehicles = vehicle;
     });
@@ -158,20 +167,31 @@ export class MakeAppointmentComponent implements OnInit {
 
       this.appointmentService
         .createApt({
+          client: this.getClient(),
           vehicle: selectedVehicle,
           prestations: prestationsFormatted,
           date: dateUTC.toISOString(),
           mechanic: selectedMechanic,
         })
-        .subscribe((response) => {
-          console.log('Rendez-vous enregistré avec succès', response);
+        .subscribe(() => {
+          this.form.reset();
+          this._matSnackBar.openFromComponent(SnackBarComponent, {
+            data: {
+              message: 'Réservation prise en compte ✅',
+              type: 'success',
+            },
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['snackbar-bg'],
+          });
         });
     }
   }
 
   isAnyPrestationSelected(): boolean {
     const prestationsArray = this.form.get('prestations') as FormArray;
-    return prestationsArray.controls.some((control) => control.value === true); // Vérifie si une prestation est sélectionnée
+    return prestationsArray.controls.some((control) => control.value === true);
   }
 
   getConcernedProducts() {
