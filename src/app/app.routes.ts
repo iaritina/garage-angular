@@ -11,6 +11,7 @@ import { MakeAppointmentComponent } from './pages/make-appointment/make-appointm
 import { ProductComponent } from './pages/product/product.component';
 import { MonitoringComponent } from './pages/monitoring/monitoring.component';
 import { TaskComponent } from './pages/task/task.component';
+import { ClientsAppointmentComponent } from './pages/clients-appointment/clients-appointment.component';
 
 export const routes: Routes = [
   {
@@ -21,6 +22,11 @@ export const routes: Routes = [
       {
         path: 'tracking',
         component: MonitoringComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'my-appointments',
+        component: ClientsAppointmentComponent,
         canActivate: [AuthGuard],
       },
       {

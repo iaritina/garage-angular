@@ -41,6 +41,7 @@
                 @for (vehicle of vehicles; track vehicle._id) {
 
                 <mat-option [value]="vehicle._id">
+                  {{ vehicle.model.brand.name }}
                   {{ vehicle.model.name }}</mat-option
                 >
                 }
@@ -187,7 +188,7 @@
               </div>
             </div>
           </div>
-          @if(mechanics.length > 0){
+          @if(mechanics.length > 0 && form.value.date) {
           <div class="m-t-15 m-b-0 icon-text-container">
             <mat-icon
               aria-hidden="false"
@@ -199,7 +200,6 @@
           <mat-form-field appearance="outline" class="select-mecano">
             <mat-select formControlName="mechanic">
               @for (mechanic of mechanics; track mechanic._id) {
-
               <mat-option [value]="mechanic._id">
                 {{ mechanic.firstname }}</mat-option
               >
