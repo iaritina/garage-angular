@@ -14,6 +14,11 @@ export const navItems: NavItem[] = [
     iconName: 'hammer',
     route: '/tracking',
   },
+  {
+    displayName: 'Mes reservations',
+    iconName: 'calendar-clock',
+    route: '/my-appointments',
+  },
 
   {
     navCap: 'Navigations',

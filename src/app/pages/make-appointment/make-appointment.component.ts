@@ -35,6 +35,7 @@ import { VehicleService } from 'src/app/services/vehicle/vehicle.service';
 import { ProductService } from 'src/app/services/product/product.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarComponent } from 'src/app/components/snackbar/snack-bar/snack-bar.component';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-make-appointment',
   providers: [
@@ -98,6 +99,7 @@ export class MakeAppointmentComponent implements OnInit {
 
   private _formBuilder = inject(FormBuilder);
   private _matSnackBar = inject(MatSnackBar);
+  private _router = inject(Router);
 
   //dialog
   openDialog(): void {
@@ -175,6 +177,7 @@ export class MakeAppointmentComponent implements OnInit {
         })
         .subscribe(() => {
           this.form.reset();
+          this._router.navigate(['/my-appointments']);
           this._matSnackBar.openFromComponent(SnackBarComponent, {
             data: {
               message: 'Réservation prise en compte ✅',

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { IAppointment } from 'src/app/pages/clients-appointment/clients-appointment.component';
 import { environment } from 'src/environments/environments';
 
 @Injectable({
@@ -21,11 +22,21 @@ export class AppointmentService {
   }
 
   getAppointmentMechanic(mechanic: string): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/appointments/mechanic-task/${mechanic}`);
+    return this.http.get(
+      `${environment.apiUrl}/appointments/mechanic-task/${mechanic}`
+    );
   }
 
   completeTask(task: string) {
-    return this.http.put<any>(`${environment.apiUrl}/appointments/complete-task/${task}`, {});
+    return this.http.put<any>(
+      `${environment.apiUrl}/appointments/complete-task/${task}`,
+      {}
+    );
   }
 
+  getAllClientAppointments(clientId: string): Observable<IAppointment[]> {
+    return this.http.get<IAppointment[]>(
+      `${environment.apiUrl}/appointments/client/${clientId}`
+    );
+  }
 }
