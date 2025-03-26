@@ -12,6 +12,7 @@ export interface IUser {
   _id: string;
   firstname: string;
   email: string;
+  role: string;
 }
 @Component({
   selector: 'app-side-login',
@@ -57,7 +58,7 @@ export class AppSideLoginComponent {
         this.vehicleService.getVehicleByUser(userId).subscribe({
           next: (vehicles) => {
             if (vehicles.length > 0) {
-              return this.router.navigate(['/brands-models']);
+              return this.router.navigate(['/my-appointments']);
             }
             return this.router.navigate([
               '/authentication/register-your-vehicle',

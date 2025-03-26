@@ -23,31 +23,37 @@ export const routes: Routes = [
         path: 'tracking',
         component: MonitoringComponent,
         canActivate: [AuthGuard],
+        data: { roles: ['manager'] },
       },
       {
         path: 'my-appointments',
         component: ClientsAppointmentComponent,
         canActivate: [AuthGuard],
+        data: { roles: ['client'] },
       },
       {
         path: 'vehicles',
         component: VehicleComponent,
         canActivate: [AuthGuard],
+        data: { roles: ['manager', 'mecanicien'] },
       },
       {
         path: 'make-appointment',
         component: MakeAppointmentComponent,
         canActivate: [AuthGuard],
+        data: { roles: ['client'] },
       },
       {
         path: 'add-vehicle',
         component: VehicleFormComponent,
         canActivate: [AuthGuard],
+        data: { roles: ['manager', 'mecanicien'] },
       },
       {
         path: 'task',
         component: TaskComponent,
         canActivate: [AuthGuard],
+        data: { roles: ['mecanicien'] },
       },
       // {
       //   path: 'appointments',
@@ -58,26 +64,32 @@ export const routes: Routes = [
         path: 'products',
         component: ProductComponent,
         canActivate: [AuthGuard],
+        data: { roles: ['manager', 'mecanicien'] },
       },
       {
         path: 'services',
         component: ServiceComponent,
         canActivate: [AuthGuard],
+        data: { roles: ['manager'] },
       },
       {
         path: 'brands-models',
         component: BrandsModelsComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['manager', 'mecanicien'] },
       },
       {
         path: 'mechanic',
         component: MechanicComponent,
         canActivate: [AuthGuard],
+        data: { roles: ['manager'] },
       },
       {
         path: 'dashboard',
         loadChildren: () =>
           import('./pages/pages.routes').then((m) => m.PagesRoutes),
         canActivate: [AuthGuard], // Protéger cette route avec AuthGuard
+        data: { roles: ['manager'] },
       },
       {
         path: 'ui-components',

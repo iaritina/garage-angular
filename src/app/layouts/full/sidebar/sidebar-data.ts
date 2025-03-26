@@ -1,6 +1,7 @@
+import { INavItem } from '../full.component';
 import { NavItem } from './nav-item/nav-item';
 
-export const navItems: NavItem[] = [
+export const navItems: INavItem[] = [
   {
     navCap: 'Home',
   },
@@ -8,16 +9,19 @@ export const navItems: NavItem[] = [
     displayName: 'Dashboard',
     iconName: 'layout-grid-add',
     route: '/dashboard',
+    roles: ['manager'],
   },
   {
     displayName: 'Suivi des taches',
     iconName: 'hammer',
     route: '/tracking',
+    roles: ['manager'],
   },
   {
     displayName: 'Mes reservations',
     iconName: 'calendar-clock',
     route: '/my-appointments',
+    roles: ['client'],
   },
 
   {
@@ -32,72 +36,43 @@ export const navItems: NavItem[] = [
     displayName: 'Réserver',
     iconName: 'clock',
     route: '/make-appointment',
+    roles: ['client'],
   },
   {
     displayName: 'Vehicules',
     iconName: 'car',
     route: '/vehicles',
+    roles: ['manager', 'mecanicien'],
   },
   {
     displayName: 'Mecaniciens',
     iconName: 'users',
     route: '/mechanic',
+    roles: ['manager'],
   },
   {
     displayName: 'Marques',
     iconName: 'brand-volkswagen',
     route: '/brands-models',
+    roles: ['manager', 'mecanicien'],
   },
   {
     displayName: 'Produits',
     iconName: 'car-turbine',
     route: '/products',
+    roles: ['manager', 'mecanicien'],
   },
   {
     displayName: 'Services',
     iconName: 'hammer',
     route: '/services',
+    roles: ['manager'],
   },
   {
     displayName: 'Mes taches',
     iconName: 'list-check',
     route: '/task',
   },
-  // {
-  //   displayName: 'Badge',
-  //   iconName: 'archive',
-  //   route: '/ui-components/badge',
-  // },
-  // {
-  //   displayName: 'Chips',
-  //   iconName: 'info-circle',
-  //   route: '/ui-components/chips',
-  // },
-  // {
-  //   displayName: 'Lists',
-  //   iconName: 'list-details',
-  //   route: '/ui-components/lists',
-  // },
-  // {
-  //   displayName: 'Menu',
-  //   iconName: 'file-text',
-  //   route: '/ui-components/menu',
-  // },
-  // {
-  //   displayName: 'Tooltips',
-  //   iconName: 'file-text-ai',
-  //   route: '/ui-components/tooltips',
-  // },
-  // {
-  //   displayName: 'Forms',
-  //   iconName: 'clipboard-text',
-  //   route: '/ui-components/forms',
-  // },
-  // {
-  //   displayName: 'Tables',
-  //   iconName: 'table',
-  //   route: '/ui-components/tables',
-  // },
 
   {
     navCap: 'Auth',
