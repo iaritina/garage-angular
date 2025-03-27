@@ -60,7 +60,11 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Annuler</button>
-  <button mat-button cdkFocusInitial (click)="confirmAppointment('confirmed')">
+  <button
+    mat-button
+    cdkFocusInitial
+    (click)="confirmAppointment('confirmed'); openDialog()"
+  >
     Confirmer
   </button>
 </mat-dialog-actions>

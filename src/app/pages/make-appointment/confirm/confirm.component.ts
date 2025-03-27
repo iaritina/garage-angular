@@ -44,13 +44,15 @@ export class ConfirmComponent {
   }
 
   readonly dialog = inject(MatDialog);
-  /* openDialog(): void {
+  openDialog(): void {
     const dialogRef = this.dialog.open(ProductsChoiceComponent, {
+      height: '400px',
+      width: '600px',
       data: { car: this.data.car.name, prestations: this.data.prestations },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
     });
-  } */
+  }
 }

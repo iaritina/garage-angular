@@ -1,8 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { AppointmentService } from 'src/app/services/appointment/appointment.service';
 import { Token } from 'src/app/utils/token';
 
@@ -26,7 +32,7 @@ export interface IAppointment {
   templateUrl: './clients-appointment.component.html',
   styleUrl: './clients-appointment.component.scss',
 })
-export class ClientsAppointmentComponent implements OnInit {
+export class ClientsAppointmentComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['vehicle', 'prestation', 'mechanic', 'date'];
 
   ngOnInit(): void {
@@ -37,7 +43,14 @@ export class ClientsAppointmentComponent implements OnInit {
   private _tokenUtils = inject(Token);
 
   appointments: IAppointment[] = [];
+  datasource = new MatTableDataSource<IAppointment>(this.appointments);
   private _TOKEN = localStorage.getItem('token');
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  ngAfterViewInit() {
+    this.datasource.paginator = this.paginator;
+  }
 
   getClient() {
     const client = this._tokenUtils.getUserFromToken(this._TOKEN);
@@ -50,7 +63,7 @@ export class ClientsAppointmentComponent implements OnInit {
       .getAllClientAppointments(client)
       .subscribe((data) => {
         this.appointments = data;
-        console.log(data);
+        this.datasource.data = data;
       });
   }
 }
