@@ -1,41 +1,62 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import {
-  FormArray,
-  FormBuilder,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormArray, FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatTableModule } from '@angular/material/table';
-import { ServiceService } from 'src/app/services/service/service.service';
-import { IUser } from '../authentication/side-login/side-login.component';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatTimepickerModule } from '@angular/material/timepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSelect } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
+import { ProductService } from 'src/app/services/product/product.service';
+import { ServiceService } from 'src/app/services/service/service.service';
+import { MinutesToHours } from './minutesToHours';
 import {
   MAT_DATE_LOCALE,
   MatOption,
   provideNativeDateAdapter,
 } from '@angular/material/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MinutesToHours } from './minutesToHours';
 import { AppointmentService } from 'src/app/services/appointment/appointment.service';
-import { MatSelect } from '@angular/material/select';
-import { MatDialog } from '@angular/material/dialog';
-import { ConfirmComponent } from './confirm/confirm.component';
-import { Token } from 'src/app/utils/token';
 import { VehicleService } from 'src/app/services/vehicle/vehicle.service';
-import { ProductService } from 'src/app/services/product/product.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { SnackBarComponent } from 'src/app/components/snackbar/snack-bar/snack-bar.component';
+import { Token } from 'src/app/utils/token';
+import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+
+
+interface Service {
+  _id: string;
+  name: string;
+  current_price: number;
+  next_service_km: number;
+  duration: number;
+  commission: number;
+  isDeleted: boolean;
+}
+
+interface Product {
+  _id: string;
+  name: string;
+  current_price: number;
+  service: string;
+  isDeleted: boolean;
+}
+
+interface ServiceSelection {
+  service: Service;
+  selectedProducts: { product: Product; quantity: number }[];
+}
+
+interface IUser {
+  _id: string;
+  firstname: string;
+  email: string;
+  role: string;
+}
+
 @Component({
   selector: 'app-make-appointment',
   providers: [
@@ -53,7 +74,7 @@ import { Router } from '@angular/router';
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-    MatTimepickerModule,
+    MatDatepickerModule,
     MatIconModule,
     MatProgressBarModule,
     MatGridListModule,
@@ -62,87 +83,68 @@ import { Router } from '@angular/router';
     MatOption,
   ],
   templateUrl: './make-appointment.component.html',
-  styleUrl: './make-appointment.component.scss',
+  styleUrls: ['./make-appointment.component.scss']
 })
 export class MakeAppointmentComponent implements OnInit {
-  readonly dialog = inject(MatDialog);
-  loading: boolean = false;
-  minDate: Date; // validation de date
+  services: Service[] = [];
+  products: Product[] = [];
+  mechanics: IUser[] = [];
 
-  //date sans dimanche
+
+  vehicles: any[] = [];
+  vehicle = {};
+
+  minDate: Date;
+  loading: boolean = false;
+
+  private _token = inject(Token);
+  private TOKEN = localStorage.getItem('token');
+
+  selectedServices: ServiceSelection[] = [];
+  appointment: any = {
+    selectedServices: [],
+    selectedVehicle: null,
+    date: new Date().toISOString().split('T')[0],
+  };
+
+  private _formBuilder = inject(FormBuilder);
+
   myFilter = (d: Date | null): boolean => {
     const day = (d || new Date()).getDay();
     return day !== 0;
   };
 
+  constructor(
+    private serviceService: ServiceService,
+    private productService: ProductService,
+    private appointmentService: AppointmentService,
+    private vehicleService: VehicleService,
+    private router: Router
+  ) {}
+
   ngOnInit(): void {
-    this.loadPrestations();
+    this.loadServices();
+    this.loadProducts();
     this.getClientVehicle();
-    this.minDate = new Date(); //ne pas prendre en compte les dates antérieures
   }
 
-  displayedColumns: string[] = ['choose', 'name', 'duration', 'current_price'];
-  current_date = new Date();
-  private prestationService = inject(ServiceService);
-  private appointmentService = inject(AppointmentService);
-  prestations: any[] = [];
-  mechanics: IUser[] = [];
-  vehicles: any[] = [];
-  private vehicleService = inject(VehicleService);
-  private productService = inject(ProductService);
-  products: any[] = [];
-
-  vehicle = {};
-
-  private _token = inject(Token);
-  private TOKEN = localStorage.getItem('token');
-
-  private _formBuilder = inject(FormBuilder);
-  private _matSnackBar = inject(MatSnackBar);
-  private _router = inject(Router);
-
-  //dialog
-  openDialog(): void {
-    const selectedPrestations = this.getSelectedPrestations();
-    const totalPrice = this.getTotalPrice();
-    const fixedDate = this.form.value?.date;
-    const mechanic = this.getSelectedMechanic();
-    this.getConcernedProducts();
-
-    const selectedVehicle = this.form.value.vehicle;
-    if (selectedVehicle) {
-      this.vehicleService.getVehicleById(selectedVehicle).subscribe((data) => {
-        this.vehicle = data.model;
-
-        // Ouvrir le dialog après avoir récupéré le véhicule
-        this.dialog.open(ConfirmComponent, {
-          data: {
-            prestations: selectedPrestations,
-            total: totalPrice,
-            date: fixedDate,
-            mechanic: mechanic,
-            car: this.vehicle,
-            prod: this.products,
-            save: (value: any) => this.saveAppointment(value),
-          },
-        });
-      });
-    } else {
-      console.error('Aucun véhicule sélectionné');
-    }
+  loadServices(): void {
+    this.serviceService.getAllService().subscribe((data: any[]) => {
+      this.services = data as Service[];
+    });
   }
 
-  form = this._formBuilder.group({
-    prestations: this._formBuilder.array([]),
-    vehicle: ['', Validators.required],
-    date: [null, Validators.required],
-    mechanic: ['', Validators.required],
-  });
+  loadProducts(): void {
+    this.productService.getAllProduct().subscribe((data: any[]) => {
+      this.products = data as Product[];
+    });
+  }
 
   getClient() {
     const client = this._token.getUserFromToken(this.TOKEN);
     return client;
   }
+
   getClientVehicle() {
     const client = this.getClient();
     this.vehicleService.getVehicleByUser(client).subscribe((vehicle) => {
@@ -150,115 +152,78 @@ export class MakeAppointmentComponent implements OnInit {
     });
   }
 
-  saveAppointment(value: string): void {
-    const selectedPrestations = this.getSelectedPrestations();
-    const selectedMechanic = this.getSelectedMechanic();
-    const selectedDate = this.form.value?.date;
-    const selectedVehicle = this.form.value?.vehicle;
+  selectVehicle(vehicle: any): void {
+    this.appointment.selectedVehicle = vehicle;
+  }
 
-    if (!selectedDate || !selectedPrestations.length) return;
+  isServiceSelected(serviceId: string): boolean {
+    return this.selectedServices.some(s => s.service._id === serviceId);
+  }
 
-    const dateUTC = new Date(selectedDate);
-    dateUTC.setHours(12, 0, 0, 0);
-
-    if (value === 'confirmed') {
-      const prestationsFormatted = selectedPrestations.map((prestation) => ({
-        service: prestation._id,
-        price: prestation.current_price,
-      }));
-
-      this.appointmentService
-        .createApt({
-          client: this.getClient(),
-          vehicle: selectedVehicle,
-          prestations: prestationsFormatted,
-          date: dateUTC.toISOString(),
-          mechanic: selectedMechanic,
-        })
-        .subscribe(() => {
-          this.form.reset();
-          this._router.navigate(['/my-appointments']);
-          this._matSnackBar.openFromComponent(SnackBarComponent, {
-            data: {
-              message: 'Réservation prise en compte ✅',
-              type: 'success',
-            },
-            duration: 3000,
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-            panelClass: ['snackbar-bg'],
-          });
-        });
+  selectService(service: Service): void {
+    if (!this.selectedServices.find(s => s.service._id === service._id)) {
+      this.selectedServices.push({
+        service: service,
+        selectedProducts: []
+      });
     }
   }
 
-  isAnyPrestationSelected(): boolean {
-    const prestationsArray = this.form.get('prestations') as FormArray;
-    return prestationsArray.controls.some((control) => control.value === true);
-  }
-
-  getConcernedProducts() {
-    const selectedPrestations = this.getSelectedPrestations();
-
-    const prestationIds = selectedPrestations.map((p: any) => p?._id || p?.id);
-
-    this.productService
-      .getProductsByServices(prestationIds)
-      .subscribe((products) => {
-        this.products = products;
-        console.log(this.products);
-      });
-  }
-
-  getSelectedPrestations(): {
-    _id: string;
-    name: string;
-    current_price: number;
-  }[] {
-    const prestationsArray = this.form.get('prestations') as FormArray;
-
-    // Récupérer les IDs des prestations sélectionnées
-    return this.prestations
-      .filter((_, index) => prestationsArray.at(index).value === true)
-      .map((prestation) => ({
-        _id: prestation._id,
-        name: prestation.name,
-        current_price: prestation.current_price,
-      }));
-  }
-
-  getTotalPrice(): number {
-    return this.getSelectedPrestations().reduce(
-      (sum, prestation) => sum + prestation.current_price,
-      0
+  removeService(serviceId: string): void {
+    this.selectedServices = this.selectedServices.filter(
+      s => s.service._id !== serviceId
     );
   }
 
-  loadPrestations(): void {
-    this.loading = true;
-    this.prestationService.getAllService().subscribe((data) => {
-      this.prestations = data;
-      this.loading = false;
-
-      const prestationsArray = this.form.get('prestations') as FormArray;
-      prestationsArray.clear();
-
-      this.prestations.forEach(() => {
-        prestationsArray.push(this._formBuilder.control(false));
-      });
-    });
+  getProductsForService(serviceId: string): Product[] {
+    const filteredProducts = this.products.filter((product: any) => product.service._id === serviceId);
+    return filteredProducts;
   }
-  getSelectedMechanic(): any {
-    return this.mechanics.find(
-      (m) => m._id === this.form.get('mechanic')?.value
+
+  getProductQuantity(serviceSelection: ServiceSelection, productId: string): number {
+    const productSelection = serviceSelection.selectedProducts.find(
+      (p: any) => p.product._id === productId
     );
+    return productSelection?.quantity || 0;
   }
+
+  updateProductQuantity(serviceSelection: ServiceSelection, product: Product, quantity: number): void {
+    const productSelection = serviceSelection.selectedProducts.find(
+      (p: any) => p.product._id === product._id
+    );
+
+    if (quantity > 0) {
+      if (productSelection) {
+        productSelection.quantity = quantity;
+      } else {
+        serviceSelection.selectedProducts.push({ product, quantity });
+      }
+    } else {
+      serviceSelection.selectedProducts = serviceSelection.selectedProducts.filter(
+        (p: any) => p.product._id !== product._id
+      );
+    }
+  }
+
+
+  form = this._formBuilder.group({
+    prestations: this._formBuilder.array([]),
+    date: [null, Validators.required],
+    mechanic: ['', Validators.required],
+  });
+
 
   loadAvailableMechanics() {
     this.loading = true;
 
-    const selectedPrestations = this.getSelectedPrestations();
+    const selectedPrestations = this.selectedServices.map((prestation) => ({
+      _id: prestation.service._id,
+      name: prestation.service.name,
+      current_price: prestation.service.current_price,
+    }));
+
     const selectedDate = this.form.get('date')?.value;
+
 
     if (!selectedPrestations.length || !selectedDate) {
       this.loading = false;
@@ -276,5 +241,61 @@ export class MakeAppointmentComponent implements OnInit {
         this.mechanics = mechanics;
         this.loading = false;
       });
+
   }
+
+  saveAppointment(): void {
+    const selectedPrestations = this.selectedServices.map((service) => service.service);
+    const selectedMechanic = this.form.value?.mechanic;
+    const selectedDate = this.form.value?.date;
+    const selectedVehicle = this.appointment.selectedVehicle._id;
+
+
+    if (!selectedDate || !selectedPrestations.length) return;
+
+    const date = new Date(selectedDate);
+    date.setHours(12,0,0,0);
+
+    const prestationFormatted = selectedPrestations.map((prestation) => ({
+      service: prestation._id,
+      price: prestation.current_price,
+    }));
+
+    const interventionFormatted = this.selectedServices.map((service) => 
+      service.selectedProducts.map((productSelection) => ({
+        product: productSelection.product._id, 
+        price: productSelection.product.current_price, 
+        quantity: productSelection.quantity,  
+      }))
+    ).flat();  
+    
+  
+    const dataFormatted = {
+      appointment: {
+        client: this.getClient(),
+        vehicle: selectedVehicle,
+        prestations: prestationFormatted,
+        date: date,
+        mechanic: selectedMechanic,
+      },
+      intervention: interventionFormatted,
+    };
+
+
+
+    this.appointmentService.createApt(dataFormatted.appointment, dataFormatted.intervention).subscribe(() => {
+      Swal.fire({
+        title: 'Rendez-vous enregistrer !',
+        text: 'Un courrier électronique a été envoyé pour la facture de votre service.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      }).then(() => {
+      
+        this.router.navigate(['/my-appointments']);
+      });;
+    });
+
+  }
+
 }
+

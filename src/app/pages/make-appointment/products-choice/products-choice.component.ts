@@ -36,15 +36,12 @@ export class ProductsChoiceComponent {
   readonly dialogRef = inject(MatDialogRef<ProductsChoiceComponent>);
   readonly data = inject(MAT_DIALOG_DATA);
 
-  displayedColumns: string[] = ['choose', 'prestation', 'price'];
+  displayedColumns: string[] = ['choose', 'prestation', 'price', 'quantity'];
 
   private _formBuilder = inject(FormBuilder);
 
   form = this._formBuilder.group({
     prestations: this._formBuilder.array([]),
-    vehicle: ['', Validators.required],
-    date: [null, Validators.required],
-    mechanic: ['', Validators.required],
   });
 
   isAnyPrestationSelected(): boolean {
