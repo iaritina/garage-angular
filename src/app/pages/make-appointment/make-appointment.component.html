@@ -1,194 +1,131 @@
-<mat-card class="cardWithShadow productcard overflow-hidden">
-  <mat-card-header>
-    <mat-card-title class="m-b-0">Prendre un rendez-vous</mat-card-title>
-    <div class="icon-text-container">
-      <mat-icon
-        aria-hidden="false"
-        aria-label="Example home icon"
-        fontIcon="info"
-      ></mat-icon>
-      <p class="info">Reservez en quelques etapes</p>
-    </div>
-  </mat-card-header>
-  <mat-card-content class="b-t-1" fxLayout="row" fxLayoutAlign="center center">
-    @if (loading) {
-    <div class="loading-container">
-      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-    </div>
-    }
-    <form [formGroup]="form">
-      <mat-card class="cardWithShadow productcard overflow-hidden">
-        <mat-card-header>
-          <mat-card-title class="m-b-0">Voitures</mat-card-title>
-          <div class="icon-text-container">
-            <mat-icon
-              aria-hidden="false"
-              aria-label="Example home icon"
-              fontIcon="info"
-            ></mat-icon>
-            <p class="info">Veuillez choisir votre voiture</p>
-          </div>
-        </mat-card-header>
-        <mat-card-content
-          class="b-t-1"
-          fxLayout="row"
-          fxLayoutAlign="center center"
-        >
-          <div class="select-cars">
-            <mat-label class="f-w-600 m-b-8 d-block">Véhicule</mat-label>
-            <mat-form-field appearance="outline" class="select-vehicle">
-              <mat-select formControlName="vehicle">
-                @for (vehicle of vehicles; track vehicle._id) {
+<div class="page-container">
+  <header class="header">
+    <h1>Réservation d'entretien automobile</h1>
+    <p class="subtitle">Sélectionnez vos services et produits</p>
+  </header>
 
-                <mat-option [value]="vehicle._id">
-                  {{ vehicle.model.brand.name }}
-                  {{ vehicle.model.name }}</mat-option
-                >
-                }
-              </mat-select>
-            </mat-form-field>
-          </div>
-        </mat-card-content>
-      </mat-card>
-      @if (form.value.vehicle) {
-      <mat-card class="cardWithShadow productcard overflow-hidden">
-        <mat-card-header>
-          <mat-card-title class="m-b-0">Prestations</mat-card-title>
-          <div class="icon-text-container">
-            <mat-icon
-              aria-hidden="false"
-              aria-label="Example home icon"
-              fontIcon="info"
-            ></mat-icon>
-            <p class="info">
-              Veuillez choisir les prestations que vous désirez d'effectuer
-            </p>
-          </div>
-        </mat-card-header>
-        <mat-card-content
-          class="b-t-1"
-          fxLayout="row"
-          fxLayoutAlign="center center"
-        >
-          <div class="prestation-tab">
-            <mat-table [dataSource]="prestations" class="mat-elevation-z8">
-              <!--- Note that these columns can be defined in any order.
-                        The actual rendered columns are set as a property on the row definition" -->
-              <ng-container matColumnDef="choose">
-                <mat-header-cell *matHeaderCellDef> Choisir </mat-header-cell>
-                <mat-cell *matCellDef="let element; let i = index">
-                  <mat-checkbox
-                    class="example-margin"
-                    [formControl]="form.controls.prestations.at(i)"
-                    (change)="isAnyPrestationSelected()"
-                  ></mat-checkbox>
-                </mat-cell>
-              </ng-container>
-              <ng-container matColumnDef="name">
-                <mat-header-cell *matHeaderCellDef> Services </mat-header-cell>
-                <mat-cell *matCellDef="let element" class="prestations-name">
-                  {{ element.name }}
-                </mat-cell>
-              </ng-container>
-              <ng-container matColumnDef="current_price">
-                <mat-header-cell *matHeaderCellDef class="action-header">
-                  Main-d'œuvre
-                </mat-header-cell>
-                <!-- Pipe currency pour bien formater les devises -->
-                <mat-cell *matCellDef="let element">
-                  {{
-                    element.current_price
-                      | currency : "MGA" : "symbol" : "1.0-2" : "fr-FR"
-                  }}
-                </mat-cell>
-              </ng-container>
+  <form [formGroup] = "form">
+  <div class="main-content">
 
-              <ng-container matColumnDef="duration">
-                <mat-header-cell *matHeaderCellDef class="action-header">
-                  Durée
-                </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                  {{ element.duration | durationToHours }}
-                </mat-cell>
-              </ng-container>
+    <section class="vehicle-section">
+      <h2>Sélectionnez votre véhicule</h2>
+      <div class="vehicles-grid">
+        @for(vehicle of vehicles; track vehicle._id) {
+          <div 
+            class="vehicle-card"
+            [class.selected]="appointment.selectedVehicle?._id === vehicle._id"
+            (click)="selectVehicle(vehicle)"
+          >
+          <div class="vehicle-icon">🚗</div>
+          <div class="vehicle-content">
+            <h3>{{ vehicle.model.brand.name }} {{ vehicle.model.name }}</h3>
+            <p>Année: {{ vehicle.year }}</p>
+            <p>Immatriculation: {{ vehicle.immatriculation }}</p>
+          </div>
+          </div>
+        }
+      </div>
+    </section>
 
-              <mat-header-row
-                *matHeaderRowDef="displayedColumns"
-              ></mat-header-row>
-              <mat-row
-                *matRowDef="let row; columns: displayedColumns"
-              ></mat-row>
-            </mat-table>
-          </div>
-        </mat-card-content>
-      </mat-card>
-      } @if (isAnyPrestationSelected()) {
-      <mat-card class="cardWithShadow productcard overflow-hidden">
-        <mat-card-header>
-          <mat-card-title class="m-b-0">Dates & mécanos</mat-card-title>
-          <div class="icon-text-container">
-            <mat-icon
-              aria-hidden="false"
-              aria-label="Example home icon"
-              fontIcon="info"
-            ></mat-icon>
-            <p class="info">
-              Veuillez choisir les prestations que vous désirez d'effectuer
-            </p>
-          </div>
-        </mat-card-header>
-        <mat-card-content class="b-t-1">
-          <div class="clock-container">
-            <mat-card appearance="outlined" class="clock">
-              <mat-card-content class="b-t-1">
-                <h3 class="date-text">
-                  {{ current_date | date : "fullDate" }}
-                </h3>
-              </mat-card-content>
-            </mat-card>
-          </div>
-          <div class="input-date">
-            <div class="m-b-0 icon-text-container">
-              <mat-icon
-                aria-hidden="false"
-                aria-label="Example home icon"
-                fontIcon="info"
-              ></mat-icon>
-              <p class="info">
-                Sélectionnez la date qui vous convient le mieux
-              </p>
+    <section class="services-section">
+      <h2>Services disponibles</h2>
+      <div class="services-grid">
+        @for (service of services; track service._id) {
+          <div class="service-card"
+               [class.selected]="isServiceSelected(service._id)"
+               (click)="selectService(service)">
+            <div class="service-icon">🔧</div>
+            <div class="service-content">
+              <h3>{{ service.name }}</h3>
+              <p>Prix: {{service.current_price}} €</p>
             </div>
-            <div class="date-time-picker">
-              <mat-form-field class="example-full-width">
-                <input
-                  matInput
-                  [matDatepickerFilter]="myFilter"
-                  [matDatepicker]="picker"
-                  formControlName="date"
-                  [min]="minDate"
-                />
-                <mat-hint>DD/MM/YYYY</mat-hint>
-                <mat-datepicker-toggle
-                  matIconSuffix
-                  [for]="picker"
-                ></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-              </mat-form-field>
+          </div>
+        }
+      </div>
+    </section>
 
-              <div class="btn-container">
-                <button
-                  mat-mini-fab
-                  extended
-                  class="btn-verifier"
-                  (click)="loadAvailableMechanics()"
-                >
-                  <mat-icon>search</mat-icon>
-                  <span> Verifier </span>
+    @if (selectedServices.length > 0) {
+      <section class="selected-services">
+        <h2>Votre sélection</h2>
+        <div class="service-selections">
+          @for (serviceSelection of selectedServices; track serviceSelection.service._id) {
+            <div class="selected-service-card">
+              <div class="service-header">
+                <h3>{{ serviceSelection.service.name }}</h3>
+                <button class="remove-button" (click)="removeService(serviceSelection.service._id)">
+                  <span class="icon">×</span>
                 </button>
               </div>
+
+              <div class="products-grid">
+                @for (product of getProductsForService(serviceSelection.service._id); track product._id) {
+                  <div class="product-card">
+                    <div class="product-info">
+                      <h4>{{ product.name }}</h4>
+                      <p class="price">{{ product.current_price.toLocaleString("fr-FR") }} MGA</p>
+                      <p class="description">Description du produit</p>
+                    </div>
+                    <div class="quantity-control">
+                      <button class="quantity-btn"
+                              (click)="updateProductQuantity(serviceSelection, product, getProductQuantity(serviceSelection, product._id) - 1)"
+                              [disabled]="getProductQuantity(serviceSelection, product._id) === 0">-</button>
+                      <span class="quantity">{{ getProductQuantity(serviceSelection, product._id) }}</span>
+                      <button class="quantity-btn"
+                              (click)="updateProductQuantity(serviceSelection, product, getProductQuantity(serviceSelection, product._id) + 1)">+</button>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+
+      <section class="appointment-details">
+        <h2>Détails du rendez-vous</h2>
+        <div class="input-date">
+          <div class="m-b-0 icon-text-container">
+            <mat-icon
+              aria-hidden="false"
+              aria-label="Example home icon"
+              fontIcon="info"
+            ></mat-icon>
+            <p class="info">
+              Sélectionnez la date qui vous convient le mieux
+            </p>
+          </div>
+          <div class="date-time-picker">
+            <mat-form-field class="example-full-width">
+              <input
+                matInput
+                [matDatepickerFilter]="myFilter"
+                [matDatepicker]="picker"
+                formControlName="date"
+                [min]="minDate"
+              />
+              <mat-hint>DD/MM/YYYY</mat-hint>
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <div class="btn-container">
+              <button
+                mat-mini-fab
+                extended
+                class="btn-verifier"
+                (click)="loadAvailableMechanics()"
+              >
+                <mat-icon>search</mat-icon>
+                <span> Verifier </span>
+              </button>
             </div>
           </div>
-          @if(mechanics.length > 0 && form.value.date) {
+        </div>
+
+        @if(mechanics.length > 0 && form.value.date) {
           <div class="m-t-15 m-b-0 icon-text-container">
             <mat-icon
               aria-hidden="false"
@@ -200,27 +137,30 @@
           <mat-form-field appearance="outline" class="select-mecano">
             <mat-select formControlName="mechanic">
               @for (mechanic of mechanics; track mechanic._id) {
-              <mat-option [value]="mechanic._id">
+                <mat-option [value]="mechanic._id">
                 {{ mechanic.firstname }}</mat-option
               >
               }
             </mat-select>
+
           </mat-form-field>
-          <div class="m-t-8">
-            <button
-              mat-flat-button
-              color="primary"
-              class="m-r-8"
-              [disabled]="!form.valid"
-              (click)="openDialog()"
-            >
-              Terminer
-            </button>
-          </div>
+
           }
-        </mat-card-content>
-      </mat-card>
-      }
-    </form>
-  </mat-card-content>
-</mat-card>
+
+      </section>
+
+      <div class="action-buttons">
+        <button 
+          mat-flat-button
+          color="primary"
+          class="m-r-8"
+          [disabled]="!form.valid"
+          (click)="saveAppointment()">
+          Confirmer le rendez-vous
+        </button>
+      </div>
+    }
+
+  </div>
+  </form>
+</div>

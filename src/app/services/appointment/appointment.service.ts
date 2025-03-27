@@ -10,8 +10,10 @@ import { environment } from 'src/environments/environments';
 export class AppointmentService {
   private http = inject(HttpClient);
 
-  createApt(value: any): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/appointments/`, value);
+  createApt(appointment: any,intervention: any): Observable<any> {
+    const body = {appointment, intervention};
+    console.log('body',body)
+    return this.http.post(`${environment.apiUrl}/appointments/`, body);
   }
 
   getAvailableMecanics(value: any): Observable<any> {
