@@ -12,6 +12,7 @@ import { ProductComponent } from './pages/product/product.component';
 import { MonitoringComponent } from './pages/monitoring/monitoring.component';
 import { TaskComponent } from './pages/task/task.component';
 import { ClientsAppointmentComponent } from './pages/clients-appointment/clients-appointment.component';
+import { StatisicsComponent } from './pages/statisics/statisics.component';
 
 export const routes: Routes = [
   {
@@ -24,6 +25,12 @@ export const routes: Routes = [
         component: MonitoringComponent,
         canActivate: [AuthGuard],
         data: { roles: ['manager'] },
+      },
+      {
+        path: 'statistics',
+        component: StatisicsComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['mecanicien'] },
       },
       {
         path: 'my-appointments',
