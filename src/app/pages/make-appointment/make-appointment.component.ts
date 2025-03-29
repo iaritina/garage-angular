@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import {
-  FormArray,
   FormBuilder,
   FormsModule,
   ReactiveFormsModule,
@@ -20,7 +19,6 @@ import { MatSelect } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { ProductService } from 'src/app/services/product/product.service';
 import { ServiceService } from 'src/app/services/service/service.service';
-import { MinutesToHours } from './minutesToHours';
 import {
   MAT_DATE_LOCALE,
   MatOption,
@@ -83,7 +81,6 @@ interface IUser {
     MatIconModule,
     MatProgressBarModule,
     MatGridListModule,
-    MinutesToHours,
     MatSelect,
     MatOption,
   ],
