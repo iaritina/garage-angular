@@ -1,10 +1,4 @@
-import {
-  Component,
-  inject,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -22,6 +16,7 @@ import { VehicleService } from 'src/app/services/vehicle/vehicle.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarComponent } from 'src/app/components/snackbar/snack-bar/snack-bar.component';
 import { UserService } from 'src/app/services/user/user.service';
+import { Token } from 'src/app/utils/token';
 
 @Component({
   selector: 'app-register-client-vehicle',
@@ -107,7 +102,7 @@ export class RegisterClientVehicleComponent implements OnInit {
     this.vehicleService
       .saveClientVehicle({ ...this.form.value, user: id })
       .subscribe(() => {
-        this.router.navigate(['/brands-models']);
+        this.router.navigate(['/my-appointments']);
         this.snackBar.openFromComponent(SnackBarComponent, {
           data: { message: 'Bienvenue à bord ✅', type: 'success' },
           duration: 3000,
@@ -123,12 +118,13 @@ export class RegisterClientVehicleComponent implements OnInit {
     this.isModelDisabled = !brand_id;
   }
 
+  private _TOKEN = localStorage.getItem('token');
+  private tokenUtils = inject(Token);
+
   getUserId() {
-    const email = localStorage.getItem('email');
-    if (email) {
-      this.userService.getUserByEmail(email).subscribe((user) => {
-        this.userId = user._id;
-      });
-    }
+    const userId = this.tokenUtils.getUserFromToken(this._TOKEN);
+    this.userService.getUserById(userId).subscribe((user) => {
+      this.userId = user._id;
+    });
   }
 }
