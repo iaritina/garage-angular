@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserService } from 'src/app/services/user/user.service';
 import { VehicleService } from 'src/app/services/vehicle/vehicle.service';
+import { Token } from 'src/app/utils/token';
 
 export interface IUser {
   _id: string;
@@ -25,6 +26,7 @@ export class AppSideLoginComponent {
   errorMessage: string = '';
 
   private vehicleService = inject(VehicleService);
+  private tokenService = inject(Token);
 
   constructor(private router: Router, private userService: UserService) {}
 
@@ -33,17 +35,44 @@ export class AppSideLoginComponent {
     password: new FormControl('', [Validators.required]),
   });
 
+  private _ROLE = {
+    client: 'client',
+    admin: 'manager',
+    mechanic: 'mecanicien',
+  };
+
+  private user: IUser = {
+    _id: '',
+    firstname: '',
+    email: '',
+    role: '',
+  };
+
+  loadUser(token: string | null) {
+    const userId = this.tokenService.getUserFromToken(token);
+    this.userService.getUserById(userId).subscribe({
+      next: (response) => {
+        this.user = response;
+        if (this.user.role === this._ROLE.client) {
+          this.verifyClientVehicle(this.user.email);
+        } else if (this.user.role === this._ROLE.admin) {
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.router.navigate(['/task']);
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+  }
+
   login() {
     this.userService.login(this.email, this.password).subscribe({
       next: (response) => {
         localStorage.setItem('token', response.token);
-        localStorage.setItem('role', response.role);
-        localStorage.setItem('email', response.email);
-        if (response.role === 'client') {
-          this.verifyClientVehicle(this.email);
-        } else {
-          this.router.navigate(['/dashboard']);
-        }
+        const token = localStorage.getItem('token');
+        this.loadUser(token);
       },
       error: (error) => {
         this.errorMessage = 'Identifiants incorrects';
