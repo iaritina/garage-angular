@@ -1,5 +1,9 @@
-<div class="blank-layout-container justify-content-center align-items-center bg-light">
-  <div class="position-relative row w-100 h-100 bg-gredient justify-content-center">
+<div
+  class="blank-layout-container justify-content-center align-items-center bg-light"
+>
+  <div
+    class="position-relative row w-100 h-100 bg-gredient justify-content-center"
+  >
     <div class="col-lg-4 d-flex align-items-center">
       <mat-card class="cardWithShadow boxed-auth">
         <mat-card-content class="p-32">
@@ -7,52 +11,69 @@
           <div class="text-center">
             <a [routerLink]="['/dashboard']">
               <img
-              src="./assets/images/logos/garage.svg"
-              class="logo align-middle m-2"
-              alt="logo"
-              width="100"
-              height="100"
-            />
+                src="./assets/images/logos/garage.svg"
+                class="logo align-middle m-2"
+                alt="logo"
+                width="100"
+                height="100"
+              />
             </a>
           </div>
 
           <!-- Affichage de l'erreur -->
-           @if(errorMessage) {
-            <div class="alert alert-danger">
-              {{ errorMessage }}
-            </div>
-           }
-
+          @if(errorMessage) {
+          <div class="alert alert-danger">
+            {{ errorMessage }}
+          </div>
+          }
 
           <!-- Formulaire de connexion -->
           <form class="m-t-30" (ngSubmit)="login()">
-            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Email</mat-label>
+            <mat-label class="f-s-14 f-w-600 m-b-12 d-block"
+              >Adresse e-mail</mat-label
+            >
             <mat-form-field appearance="outline" class="w-100" color="primary">
               <input matInput [(ngModel)]="email" name="email" required />
             </mat-form-field>
 
-            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Mot de passe</mat-label>
+            <mat-label class="f-s-14 f-w-600 m-b-12 d-block"
+              >Mot de passe</mat-label
+            >
             <mat-form-field appearance="outline" class="w-100" color="primary">
-              <input matInput [(ngModel)]="password" name="password" type="password" required />
+              <input
+                matInput
+                [(ngModel)]="password"
+                name="password"
+                type="password"
+                required
+              />
             </mat-form-field>
 
             <div class="d-flex align-items-center m-b-12">
-              <mat-checkbox color="primary">Remember this Device</mat-checkbox>
-              <a [routerLink]="['/']" class="text-primary f-w-600 text-decoration-none m-l-auto f-s-14">
-                Forgot Password ?
+              <mat-checkbox color="primary"
+                >Se souvenir de cet appareil</mat-checkbox
+              >
+              <a
+                [routerLink]="['/']"
+                class="text-primary f-w-600 text-decoration-none m-l-auto f-s-14"
+              >
+                Mot de passe oublié ?
               </a>
             </div>
 
             <!-- Bouton de connexion -->
             <button mat-flat-button color="primary" class="w-100" type="submit">
-              Sign In
+              Se connecter
             </button>
           </form>
 
           <span class="d-block f-w-500 text-center m-t-24">
-            New to Modernize?
-            <a [routerLink]="['/authentication/register']" class="text-decoration-none text-primary f-w-500 f-s-14">
-              Create an account
+            Nouveau sur Garage ?
+            <a
+              [routerLink]="['/authentication/register']"
+              class="text-decoration-none text-primary f-w-500 f-s-14"
+            >
+              Créer un compte
             </a>
           </span>
         </mat-card-content>

@@ -1,82 +1,124 @@
 <div class="page-container">
   <header class="header">
-    <h1>Réservation d'entretien automobile</h1>
+    <h1 class="apt-title">Réservation d'entretien automobile</h1>
     <p class="subtitle">Sélectionnez vos services et produits</p>
   </header>
 
-  <form [formGroup] = "form">
-  <div class="main-content">
-
-    <section class="vehicle-section">
-      <h2>Sélectionnez votre véhicule</h2>
-      <div class="vehicles-grid">
-        @for(vehicle of vehicles; track vehicle._id) {
-          <div 
+  <form [formGroup]="form">
+    <div class="main-content">
+      <section class="vehicle-section">
+        <h2>Sélectionnez votre véhicule</h2>
+        <div class="vehicles-grid">
+          @for(vehicle of vehicles; track vehicle._id) {
+          <div
             class="vehicle-card"
             [class.selected]="appointment.selectedVehicle?._id === vehicle._id"
             (click)="selectVehicle(vehicle)"
           >
-          <div class="vehicle-icon">🚗</div>
-          <div class="vehicle-content">
-            <h3>{{ vehicle.model.brand.name }} {{ vehicle.model.name }}</h3>
-            <p>Année: {{ vehicle.year }}</p>
-            <p>Immatriculation: {{ vehicle.immatriculation }}</p>
+            <div class="vehicle-icon">🚗</div>
+            <div class="vehicle-content">
+              <h3>{{ vehicle.model.brand.name }} {{ vehicle.model.name }}</h3>
+              <p>Année: {{ vehicle.year }}</p>
+              <p>Immatriculation: {{ vehicle.immatriculation }}</p>
+            </div>
           </div>
-          </div>
-        }
-      </div>
-    </section>
+          }
+        </div>
+      </section>
 
-    <section class="services-section">
-      <h2>Services disponibles</h2>
-      <div class="services-grid">
-        @for (service of services; track service._id) {
-          <div class="service-card"
-               [class.selected]="isServiceSelected(service._id)"
-               (click)="selectService(service)">
+      <section class="services-section">
+        <h2>Services disponibles</h2>
+        <div class="services-grid">
+          @for (service of services; track service._id) {
+          <div
+            class="service-card"
+            [class.selected]="isServiceSelected(service._id)"
+            (click)="selectService(service)"
+          >
             <div class="service-icon">🔧</div>
             <div class="service-content">
               <h3>{{ service.name }}</h3>
-              <p>Prix: {{service.current_price}} €</p>
+              <p>
+                Prix:
+                {{
+                  service.current_price
+                    | currency : "MGA" : "symbol" : "1.0-2" : "fr-FR"
+                }}
+              </p>
             </div>
           </div>
-        }
-      </div>
-    </section>
+          }
+        </div>
+      </section>
 
-    @if (selectedServices.length > 0) {
+      @if (selectedServices.length > 0) {
       <section class="selected-services">
         <h2>Votre sélection</h2>
         <div class="service-selections">
-          @for (serviceSelection of selectedServices; track serviceSelection.service._id) {
-            <div class="selected-service-card">
-              <div class="service-header">
-                <h3>{{ serviceSelection.service.name }}</h3>
-                <button class="remove-button" (click)="removeService(serviceSelection.service._id)">
-                  <span class="icon">×</span>
-                </button>
-              </div>
-
-              <div class="products-grid">
-                @for (product of getProductsForService(serviceSelection.service._id); track product._id) {
-                  <div class="product-card">
-                    <div class="product-info">
-                      <h4>{{ product.name }}</h4>
-                      <p class="price">{{ product.current_price.toLocaleString("fr-FR") }} MGA</p>
-                      <p class="description">Description du produit</p>
-                    </div>
-                    <div class="quantity-control">
-                      <button class="quantity-btn"
-                              (click)="updateProductQuantity(serviceSelection, product, getProductQuantity(serviceSelection, product._id) - 1)"
-                              [disabled]="getProductQuantity(serviceSelection, product._id) === 0">-</button>
-                      <span class="quantity">{{ getProductQuantity(serviceSelection, product._id) }}</span>
-                      <button class="quantity-btn"
-                              (click)="updateProductQuantity(serviceSelection, product, getProductQuantity(serviceSelection, product._id) + 1)">+</button>
-                    </div>
-                  </div>
-                }
-              </div>
+          @for (serviceSelection of selectedServices; track
+          serviceSelection.service._id) {
+          <div class="selected-service-card">
+            <div class="service-header">
+              <h3>{{ serviceSelection.service.name }}</h3>
+              <button
+                class="remove-button"
+                (click)="removeService(serviceSelection.service._id)"
+              >
+                <span class="icon">×</span>
+              </button>
             </div>
+
+            <div class="products-grid">
+              @for (product of
+              getProductsForService(serviceSelection.service._id); track
+              product._id) {
+              <div class="product-card">
+                <div class="product-info">
+                  <h4>{{ product.name }}</h4>
+                  <p class="price">
+                    {{
+                      product.current_price
+                        | currency : "MGA" : "symbol" : "1.0-2" : "fr-FR"
+                    }}
+                  </p>
+                  <p class="description">Description du produit</p>
+                </div>
+                <div class="quantity-control">
+                  <button
+                    class="quantity-btn"
+                    (click)="
+                      updateProductQuantity(
+                        serviceSelection,
+                        product,
+                        getProductQuantity(serviceSelection, product._id) - 1
+                      )
+                    "
+                    [disabled]="
+                      getProductQuantity(serviceSelection, product._id) === 0
+                    "
+                  >
+                    -
+                  </button>
+                  <span class="quantity">{{
+                    getProductQuantity(serviceSelection, product._id)
+                  }}</span>
+                  <button
+                    class="quantity-btn"
+                    (click)="
+                      updateProductQuantity(
+                        serviceSelection,
+                        product,
+                        getProductQuantity(serviceSelection, product._id) + 1
+                      )
+                    "
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+              }
+            </div>
+          </div>
           }
         </div>
       </section>
@@ -90,9 +132,7 @@
               aria-label="Example home icon"
               fontIcon="info"
             ></mat-icon>
-            <p class="info">
-              Sélectionnez la date qui vous convient le mieux
-            </p>
+            <p class="info">Sélectionnez la date qui vous convient le mieux</p>
           </div>
           <div class="date-time-picker">
             <mat-form-field class="example-full-width">
@@ -126,41 +166,39 @@
         </div>
 
         @if(mechanics.length > 0 && form.value.date) {
-          <div class="m-t-15 m-b-0 icon-text-container">
-            <mat-icon
-              aria-hidden="false"
-              aria-label="Example home icon"
-              fontIcon="info"
-            ></mat-icon>
-            <p class="info">Sélectionnez le mecano de votre choix</p>
-          </div>
-          <mat-form-field appearance="outline" class="select-mecano">
-            <mat-select formControlName="mechanic">
-              @for (mechanic of mechanics; track mechanic._id) {
-                <mat-option [value]="mechanic._id">
-                {{ mechanic.firstname }}</mat-option
-              >
-              }
-            </mat-select>
+        <div class="m-t-15 m-b-0 icon-text-container">
+          <mat-icon
+            aria-hidden="false"
+            aria-label="Example home icon"
+            fontIcon="info"
+          ></mat-icon>
+          <p class="info">Sélectionnez le mecano de votre choix</p>
+        </div>
+        <mat-form-field appearance="outline" class="select-mecano">
+          <mat-select formControlName="mechanic">
+            @for (mechanic of mechanics; track mechanic._id) {
+            <mat-option [value]="mechanic._id">
+              {{ mechanic.firstname }}</mat-option
+            >
+            }
+          </mat-select>
+        </mat-form-field>
 
-          </mat-form-field>
-
-          }
-
+        }
       </section>
 
       <div class="action-buttons">
-        <button 
+        <button
           mat-flat-button
           color="primary"
           class="m-r-8"
           [disabled]="!form.valid"
-          (click)="saveAppointment()">
+          (click)="saveAppointment()"
+        >
           Confirmer le rendez-vous
         </button>
       </div>
-    }
-
-  </div>
+      }
+    </div>
   </form>
 </div>
