@@ -45,9 +45,7 @@ export interface IVehicleBrand {
   styleUrls: ['./vehicle-brand.component.scss'],
 })
 export class VehicleBrandComponent implements OnInit {
-  title: string = 'Gestion des marques et des modeles de véhicules';
   brands: IVehicleBrand[] = [];
-  private titleComponent: Title = inject(Title);
   private brandsService = inject(VehiclesBrandsService);
   private snackBar = inject(MatSnackBar);
 
@@ -59,7 +57,6 @@ export class VehicleBrandComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.titleComponent.setTitle(this.title);
     this.loadBrands();
   }
 
