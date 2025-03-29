@@ -1,0 +1,67 @@
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.title {
+    text-align: center; 
+    color: #333;
+}
+
+.stats-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding-top: 125px;
+}
+
+.stats-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow:  4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: calc(50% - 10px);  // 50% width for large screens
+}
+
+.stats-card h3 {
+    font-size: 16px;
+    color: #555;
+}
+
+.stats-card p {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin: 10px 0 0;
+}
+
+.chart-container {
+    margin-top: 30px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    .stats-card {
+        width: 100%; // Full width for mobile screens
+        margin-bottom: 15px;  // Space between cards
+    }
+
+    .stats-container {
+        padding-top: 30px;  // Reduced padding on mobile
+    }
+
+    .chart-container {
+        margin-top: 20px;  // Reduced top margin for mobile
+    }
+
+    .title {
+        font-size: 18px;  // Adjust title size for smaller screens
+    }
+}

@@ -12,6 +12,12 @@ export const navItems: INavItem[] = [
     roles: ['manager'],
   },
   {
+    displayName: 'Statistiques',
+    iconName: 'chart-infographic',
+    route: 'statistics',
+    roles: ['mecanicien']
+  },
+  {
     displayName: 'Suivi des taches',
     iconName: 'hammer',
     route: '/tracking',
