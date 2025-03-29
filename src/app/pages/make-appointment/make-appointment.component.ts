@@ -29,6 +29,7 @@ import { VehicleService } from 'src/app/services/vehicle/vehicle.service';
 import { Token } from 'src/app/utils/token';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 interface Service {
   _id: string;
@@ -77,12 +78,12 @@ interface IUser {
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-    MatDatepickerModule,
     MatIconModule,
     MatProgressBarModule,
     MatGridListModule,
     MatSelect,
     MatOption,
+    MatTooltipModule,
   ],
   templateUrl: './make-appointment.component.html',
   styleUrls: ['./make-appointment.component.scss'],
