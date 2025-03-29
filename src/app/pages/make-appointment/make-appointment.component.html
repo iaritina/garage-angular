@@ -1,204 +1,207 @@
-<div class="page-container">
-  <header class="header">
-    <h1 class="apt-title">Réservation d'entretien automobile</h1>
-    <p class="subtitle">Sélectionnez vos services et produits</p>
-  </header>
-
-  <form [formGroup]="form">
-    <div class="main-content">
-      <section class="vehicle-section">
-        <h2>Sélectionnez votre véhicule</h2>
-        <div class="vehicles-grid">
-          @for(vehicle of vehicles; track vehicle._id) {
-          <div
-            class="vehicle-card"
-            [class.selected]="appointment.selectedVehicle?._id === vehicle._id"
-            (click)="selectVehicle(vehicle)"
-          >
-            <div class="vehicle-icon">🚗</div>
-            <div class="vehicle-content">
-              <h3>{{ vehicle.model.brand.name }} {{ vehicle.model.name }}</h3>
-              <p>Année: {{ vehicle.year }}</p>
-              <p>Immatriculation: {{ vehicle.immatriculation }}</p>
+<mat-card class="cardWithShadow productcard overflow-hidden">
+  <mat-card-header class="titre-container">
+    <mat-card-title class="m-b-0 titre"
+      >Réservez votre entretien automobile dès maintenant ! 🔧</mat-card-title
+    >
+  </mat-card-header>
+  <mat-card-content
+    class="b-t-1 form-container"
+    fxLayout="row"
+    fxLayoutAlign="center center"
+  >
+    <form [formGroup]="form">
+      <div class="main-content">
+        <section class="vehicle-section">
+          <h2 class="sub-title">Choisissez le véhicule qui vous convient !</h2>
+          <div class="vehicles-grid">
+            @for(vehicle of vehicles; track vehicle._id) {
+            <div
+              class="vehicle-card"
+              [class.selected]="
+                appointment.selectedVehicle?._id === vehicle._id
+              "
+              (click)="selectVehicle(vehicle)"
+            >
+              <div class="vehicle-icon">🚗</div>
+              <div class="vehicle-content">
+                <h3>{{ vehicle.model.brand.name }} {{ vehicle.model.name }}</h3>
+                <p>Année: {{ vehicle.year }}</p>
+                <p>Immatriculation: {{ vehicle.immatriculation }}</p>
+              </div>
             </div>
+            }
           </div>
-          }
-        </div>
-      </section>
+        </section>
 
-      <section class="services-section">
-        <h2>Services disponibles</h2>
-        <div class="services-grid">
-          @for (service of services; track service._id) {
-          <div
-            class="service-card"
-            [class.selected]="isServiceSelected(service._id)"
-            (click)="selectService(service)"
-          >
-            <div class="service-icon">🔧</div>
-            <div class="service-content">
-              <h3>{{ service.name }}</h3>
-              <p>
-                Prix:
-                {{
-                  service.current_price
-                    | currency : "MGA" : "symbol" : "1.0-2" : "fr-FR"
-                }}
-              </p>
+        <section class="services-section">
+          <h2 class="sub-title">
+            Sélectionnez le service dont votre voiture a besoin !
+          </h2>
+          <div class="services-grid">
+            @for (service of services; track service._id) {
+            <div
+              class="service-card"
+              [class.selected]="isServiceSelected(service._id)"
+              (click)="selectService(service)"
+            >
+              <div class="service-icon">🔧</div>
+              <div class="service-content">
+                <h3>{{ service.name }}</h3>
+                <p>
+                  Prix:
+                  {{
+                    service.current_price
+                      | currency : "MGA" : "symbol" : "1.0-2" : "fr-FR"
+                  }}
+                </p>
+              </div>
             </div>
+            }
           </div>
-          }
-        </div>
-      </section>
+        </section>
 
-      @if (selectedServices.length > 0) {
-      <section class="selected-services">
-        <h2>Votre sélection</h2>
-        <div class="service-selections">
-          @for (serviceSelection of selectedServices; track
-          serviceSelection.service._id) {
-          <div class="selected-service-card">
-            <div class="service-header">
-              <h3>{{ serviceSelection.service.name }}</h3>
-              <button
-                class="remove-button"
-                (click)="removeService(serviceSelection.service._id)"
-              >
-                <span class="icon">×</span>
-              </button>
-            </div>
+        @if (selectedServices.length > 0) {
+        <section class="selected-services">
+          <h2 class="sub-title">
+            Faites le bon choix et optez pour la qualité de nos produits
+          </h2>
+          <div class="service-selections">
+            @for (serviceSelection of selectedServices; track
+            serviceSelection.service._id) {
+            <div class="selected-service-card">
+              <div class="service-header">
+                <h3>{{ serviceSelection.service.name }}</h3>
+                <button
+                  class="remove-button"
+                  (click)="removeService(serviceSelection.service._id)"
+                  matTooltip="Annuler la sélection"
+                >
+                  <span class="icon">×</span>
+                </button>
+              </div>
 
-            <div class="products-grid">
-              @for (product of
-              getProductsForService(serviceSelection.service._id); track
-              product._id) {
-              <div class="product-card">
-                <div class="product-info">
-                  <h4>{{ product.name }}</h4>
-                  <p class="price">
-                    {{
-                      product.current_price
-                        | currency : "MGA" : "symbol" : "1.0-2" : "fr-FR"
-                    }}
-                  </p>
-                  <p class="description">Description du produit</p>
+              <div class="products-grid">
+                @for (product of
+                getProductsForService(serviceSelection.service._id); track
+                product._id) {
+                <div class="product-card">
+                  <div class="product-info">
+                    <h4>{{ product.name }}</h4>
+                    <p class="price">
+                      {{
+                        product.current_price
+                          | currency : "MGA" : "symbol" : "1.0-2" : "fr-FR"
+                      }}
+                    </p>
+                    <p class="description">Description du produit</p>
+                  </div>
+                  <div class="quantity-control">
+                    <button
+                      class="quantity-btn"
+                      (click)="
+                        updateProductQuantity(
+                          serviceSelection,
+                          product,
+                          getProductQuantity(serviceSelection, product._id) - 1
+                        )
+                      "
+                      [disabled]="
+                        getProductQuantity(serviceSelection, product._id) === 0
+                      "
+                    >
+                      -
+                    </button>
+                    <span class="quantity">{{
+                      getProductQuantity(serviceSelection, product._id)
+                    }}</span>
+                    <button
+                      class="quantity-btn"
+                      matTooltip="Ajoutez plus d’unités à votre commande"
+                      (click)="
+                        updateProductQuantity(
+                          serviceSelection,
+                          product,
+                          getProductQuantity(serviceSelection, product._id) + 1
+                        )
+                      "
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
-                <div class="quantity-control">
+                }
+              </div>
+            </div>
+            }
+          </div>
+        </section>
+
+        <section class="appointment-details">
+          <h2 class="sub-title">Choisissez une date et votre mécanicien !</h2>
+          <mat-card appearance="outlined">
+            <mat-card-content class="b-t-1">
+              <div class="date-time-picker flex-container">
+                <mat-form-field class="date-input">
+                  <input
+                    matInput
+                    placeholder="Entrez la date de votre rendez-vous"
+                    [matDatepickerFilter]="myFilter"
+                    [matDatepicker]="picker"
+                    formControlName="date"
+                    [min]="minDate"
+                  />
+                  <mat-hint>DD/MM/YYYY</mat-hint>
+                  <mat-datepicker-toggle
+                    matIconSuffix
+                    [for]="picker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+
+                <div class="btn-container">
                   <button
-                    class="quantity-btn"
-                    (click)="
-                      updateProductQuantity(
-                        serviceSelection,
-                        product,
-                        getProductQuantity(serviceSelection, product._id) - 1
-                      )
-                    "
-                    [disabled]="
-                      getProductQuantity(serviceSelection, product._id) === 0
-                    "
+                    mat-mini-fab
+                    extended
+                    class="btn-verifier"
+                    matTooltip="Vérification des mécaniciens disponibles"
+                    (click)="loadAvailableMechanics()"
                   >
-                    -
-                  </button>
-                  <span class="quantity">{{
-                    getProductQuantity(serviceSelection, product._id)
-                  }}</span>
-                  <button
-                    class="quantity-btn"
-                    (click)="
-                      updateProductQuantity(
-                        serviceSelection,
-                        product,
-                        getProductQuantity(serviceSelection, product._id) + 1
-                      )
-                    "
-                  >
-                    +
+                    <mat-icon>search</mat-icon>
+                    <span> Verifier </span>
                   </button>
                 </div>
               </div>
+              @if(mechanics.length > 0 && form.value.date) {
+              <mat-form-field appearance="outline" class="m-t-20 select-mecano">
+                <mat-label>Choisissez votre mécanicien</mat-label>
+                <mat-select formControlName="mechanic">
+                  @for (mechanic of mechanics; track mechanic._id) {
+                  <mat-option [value]="mechanic._id">
+                    {{ mechanic.firstname }}</mat-option
+                  >
+                  }
+                </mat-select>
+              </mat-form-field>
+
               }
-            </div>
-          </div>
-          }
+            </mat-card-content>
+          </mat-card>
+        </section>
+
+        <div class="action-buttons">
+          <button
+            mat-flat-button
+            color="primary"
+            class="m-r-8"
+            matTooltip="Validez votre rendez-vous en un clic !"
+            [disabled]="!form.valid"
+            (click)="saveAppointment()"
+          >
+            Confirmer le rendez-vous
+          </button>
         </div>
-      </section>
-
-      <section class="appointment-details">
-        <h2>Détails du rendez-vous</h2>
-        <div class="input-date">
-          <div class="m-b-0 icon-text-container">
-            <mat-icon
-              aria-hidden="false"
-              aria-label="Example home icon"
-              fontIcon="info"
-            ></mat-icon>
-            <p class="info">Sélectionnez la date qui vous convient le mieux</p>
-          </div>
-          <div class="date-time-picker">
-            <mat-form-field class="example-full-width">
-              <input
-                matInput
-                [matDatepickerFilter]="myFilter"
-                [matDatepicker]="picker"
-                formControlName="date"
-                [min]="minDate"
-              />
-              <mat-hint>DD/MM/YYYY</mat-hint>
-              <mat-datepicker-toggle
-                matIconSuffix
-                [for]="picker"
-              ></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-
-            <div class="btn-container">
-              <button
-                mat-mini-fab
-                extended
-                class="btn-verifier"
-                (click)="loadAvailableMechanics()"
-              >
-                <mat-icon>search</mat-icon>
-                <span> Verifier </span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        @if(mechanics.length > 0 && form.value.date) {
-        <div class="m-t-15 m-b-0 icon-text-container">
-          <mat-icon
-            aria-hidden="false"
-            aria-label="Example home icon"
-            fontIcon="info"
-          ></mat-icon>
-          <p class="info">Sélectionnez le mecano de votre choix</p>
-        </div>
-        <mat-form-field appearance="outline" class="select-mecano">
-          <mat-select formControlName="mechanic">
-            @for (mechanic of mechanics; track mechanic._id) {
-            <mat-option [value]="mechanic._id">
-              {{ mechanic.firstname }}</mat-option
-            >
-            }
-          </mat-select>
-        </mat-form-field>
-
         }
-      </section>
-
-      <div class="action-buttons">
-        <button
-          mat-flat-button
-          color="primary"
-          class="m-r-8"
-          [disabled]="!form.valid"
-          (click)="saveAppointment()"
-        >
-          Confirmer le rendez-vous
-        </button>
       </div>
-      }
-    </div>
-  </form>
-</div>
+    </form>
+  </mat-card-content>
+</mat-card>

@@ -36,19 +36,26 @@ export const routes: Routes = [
         path: 'my-appointments',
         component: ClientsAppointmentComponent,
         canActivate: [AuthGuard],
-        data: { roles: ['client'] },
+        data: { roles: ['client'], title: 'Mes reservations' },
       },
       {
         path: 'vehicles',
         component: VehicleComponent,
         canActivate: [AuthGuard],
-        data: { roles: ['manager', 'mecanicien'] },
+        data: {
+          roles: ['manager', 'mecanicien'],
+          title: 'Gestion des vehicules',
+        },
       },
       {
         path: 'make-appointment',
         component: MakeAppointmentComponent,
         canActivate: [AuthGuard],
-        data: { roles: ['client'] },
+        data: {
+          roles: ['client'],
+          title:
+            'Prenez rendez-vous dès maintenant pour l’entretien de votre véhicule',
+        },
       },
       {
         path: 'add-vehicle',
@@ -60,7 +67,7 @@ export const routes: Routes = [
         path: 'task',
         component: TaskComponent,
         canActivate: [AuthGuard],
-        data: { roles: ['mecanicien'] },
+        data: { roles: ['mecanicien'], title: 'Mes taches' },
       },
       // {
       //   path: 'appointments',
@@ -71,32 +78,38 @@ export const routes: Routes = [
         path: 'products',
         component: ProductComponent,
         canActivate: [AuthGuard],
-        data: { roles: ['manager', 'mecanicien'] },
+        data: {
+          roles: ['manager', 'mecanicien'],
+          title: 'Gestion des produits',
+        },
       },
       {
         path: 'services',
         component: ServiceComponent,
         canActivate: [AuthGuard],
-        data: { roles: ['manager'] },
+        data: { roles: ['manager'], title: 'Gestion des services' },
       },
       {
         path: 'brands-models',
         component: BrandsModelsComponent,
         canActivate: [AuthGuard],
-        data: { roles: ['manager', 'mecanicien'] },
+        data: {
+          roles: ['manager', 'mecanicien'],
+          title: 'Gestion des marques et modeles',
+        },
       },
       {
         path: 'mechanic',
         component: MechanicComponent,
         canActivate: [AuthGuard],
-        data: { roles: ['manager'] },
+        data: { roles: ['manager'], title: 'Gestion des mecaniciens' },
       },
       {
         path: 'dashboard',
         loadChildren: () =>
           import('./pages/pages.routes').then((m) => m.PagesRoutes),
         canActivate: [AuthGuard], // Protéger cette route avec AuthGuard
-        data: { roles: ['manager'] },
+        data: { roles: ['manager'], title: 'Tableau de bord' },
       },
       {
         path: 'ui-components',

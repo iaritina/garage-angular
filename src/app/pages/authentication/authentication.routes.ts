@@ -12,6 +12,7 @@ export const AuthenticationRoutes: Routes = [
       {
         path: 'login',
         component: AppSideLoginComponent,
+        data: { title: 'Connexion' },
       },
       {
         path: 'register',

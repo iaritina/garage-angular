@@ -8,7 +8,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { UserService } from 'src/app/services/user/user.service';
 import { VehicleService } from 'src/app/services/vehicle/vehicle.service';
 import { Token } from 'src/app/utils/token';
-
 export interface IUser {
   _id: string;
   firstname: string;
