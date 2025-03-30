@@ -125,11 +125,7 @@ export class BrandsAppointmentComponent implements OnInit {
             show: false,
           },
         },
-        title: {
-          text: 'Marque qui prenne le plus de rendez-vous',
-          align: 'center',
-          floating: true,
-        },
+
         tooltip: {
           theme: 'dark',
           x: {

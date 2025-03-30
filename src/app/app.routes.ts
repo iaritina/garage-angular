@@ -13,7 +13,7 @@ import { MonitoringComponent } from './pages/monitoring/monitoring.component';
 import { TaskComponent } from './pages/task/task.component';
 import { ClientsAppointmentComponent } from './pages/clients-appointment/clients-appointment.component';
 import { StatisicsComponent } from './pages/statisics/statisics.component';
-import { BrandsAppointmentComponent } from './pages/managers/brands-appointment/brands-appointment.component';
+import { BrandsStatComponent } from './pages/managers/brands-stat/brands-stat.component';
 
 export const routes: Routes = [
   {
@@ -29,7 +29,7 @@ export const routes: Routes = [
       },
       {
         path: 'stat',
-        component: BrandsAppointmentComponent,
+        component: BrandsStatComponent,
         canActivate: [AuthGuard],
         data: { roles: ['manager'], title: 'Statistiques' },
       },
