@@ -1,0 +1,40 @@
+<mat-card class="cardWithShadow productcard overflow-hidden">
+  <mat-card-header>
+    <mat-card-title class="m-b-0">Vos rendez-vous</mat-card-title>
+    <div class="m-l-auto">
+      <mat-form-field class="theme-select" appearance="outline">
+        <mat-select
+          [(value)]="selectedYear"
+          (selectionChange)="onYearChange($event.value)"
+        >
+          @for(year of years; track $index ) {
+          <mat-option [value]="year">
+            {{ year }}
+          </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content class="b-t-1">
+    <div id="chart">
+      @if (chartOptions && chartOptions.series?.length > 0) {
+      <apx-chart
+        [series]="chartOptions.series"
+        [chart]="chartOptions.chart"
+        [dataLabels]="chartOptions.dataLabels"
+        [stroke]="chartOptions.stroke"
+        [colors]="chartOptions.colors"
+        [title]="chartOptions.title"
+        [subtitle]="chartOptions.subtitle"
+        [plotOptions]="chartOptions.plotOptions"
+        [yaxis]="chartOptions.yaxis"
+        [xaxis]="chartOptions.xaxis"
+        [tooltip]="chartOptions.tooltip"
+        [responsive]="chartOptions.responsive"
+      ></apx-chart>
+      }
+    </div>
+  </mat-card-content>
+</mat-card>
