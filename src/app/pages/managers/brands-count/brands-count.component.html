@@ -1,0 +1,19 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content>
+    <mat-card-title
+      >Nombre de marques de voitures recensées sur le site</mat-card-title
+    >
+
+    <div class="col-5 d-flex align-items-start chart">
+      @if (yearlyChart && yearlyChart.series?.length > 0){
+      <apx-chart
+        [series]="yearlyChart.series"
+        [chart]="yearlyChart.chart"
+        [dataLabels]="yearlyChart.dataLabels"
+        [labels]="yearlyChart.labels"
+        [responsive]="yearlyChart.responsive"
+      ></apx-chart>
+      }
+    </div>
+  </mat-card-content>
+</mat-card>
