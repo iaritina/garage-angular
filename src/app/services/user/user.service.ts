@@ -63,7 +63,7 @@ export class UserService {
   }
 
   getMechanics(): Observable<IUser[]> {
-    return this.http.get<IUser[]>(`${environment.apiUrl}/users/mechanics`);
+    return this.http.get<IUser[]>(`${environment.apiUrl}/mechanics`);
   }
 
   getUserById(id: string): Observable<IUser> {
