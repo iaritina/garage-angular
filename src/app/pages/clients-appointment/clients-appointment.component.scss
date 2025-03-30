@@ -1,0 +1,73 @@
+@use "src/assets/scss/_variables" as *;
+
+.filter-description {
+  font-size: 14px;
+  color: $text-color;
+  margin-bottom: 20px;
+}
+
+.filter-field {
+  margin-right: 20px;
+}
+
+.m-t-20 {
+  margin-top: 20px;
+}
+
+/* Conteneur pour la ligne des filtres */
+.filter-row {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+/* Champs de formulaire */
+.filter-field {
+  flex: 1;
+}
+
+.filter-field.date-field {
+  flex: 0 0 200px; /* Fixe la largeur des champs de date à 200px */
+}
+
+.filter-button {
+  display: flex;
+  gap: 10px;
+  flex: 0 0 auto;
+
+  button {
+    background-color: var(--mat-sys-primary);
+    color: $white;
+  }
+}
+
+.table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  .filter-field {
+    margin-right: 0;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  .m-t-20 {
+    margin-top: 10px;
+  }
+  .filter-field.date-field {
+    flex: 1;
+  }
+
+  .filter-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .filter-button {
+    justify-content: center;
+    flex-direction: row;
+  }
+}

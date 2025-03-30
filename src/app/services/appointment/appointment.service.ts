@@ -10,9 +10,9 @@ import { environment } from 'src/environments/environments';
 export class AppointmentService {
   private http = inject(HttpClient);
 
-  createApt(appointment: any,intervention: any): Observable<any> {
-    const body = {appointment, intervention};
-    console.log('body',body)
+  createApt(appointment: any, intervention: any): Observable<any> {
+    const body = { appointment, intervention };
+    console.log('body', body);
     return this.http.post(`${environment.apiUrl}/appointments/`, body);
   }
 
@@ -36,9 +36,13 @@ export class AppointmentService {
     );
   }
 
-  getAllClientAppointments(clientId: string): Observable<IAppointment[]> {
+  getAllClientAppointments(
+    clientId: string,
+    filters: any = {}
+  ): Observable<IAppointment[]> {
     return this.http.get<IAppointment[]>(
-      `${environment.apiUrl}/appointments/client/${clientId}`
+      `${environment.apiUrl}/appointments/client/${clientId}`,
+      { params: filters }
     );
   }
 }
