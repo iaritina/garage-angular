@@ -12,10 +12,16 @@ export const navItems: INavItem[] = [
     roles: ['manager'],
   },
   {
+    displayName: 'Tableau de bord',
+    iconName: 'layout-grid-add',
+    route: '/stat',
+    roles: ['manager'],
+  },
+  {
     displayName: 'Statistiques',
     iconName: 'chart-infographic',
     route: 'statistics',
-    roles: ['mecanicien']
+    roles: ['mecanicien'],
   },
   {
     displayName: 'Suivi des taches',
