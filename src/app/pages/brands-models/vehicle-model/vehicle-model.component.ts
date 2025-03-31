@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 
 import { VehiclesModelsService } from 'src/app/services/models/vehicles-models.service';
 import { IVehicleBrand } from '../vehicle-brand/vehicle-brand.component';
@@ -10,10 +10,14 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
-import { MatTableModule } from '@angular/material/table';
-import { ModelFormComponent } from './form/model-form.component';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarComponent } from 'src/app/components/snackbar/snack-bar/snack-bar.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatPaginator } from '@angular/material/paginator';
+import { CommonModule } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { ModelFormComponent } from './form/model-form.component';
 
 export interface IVehicleModel {
   _id: string;
@@ -28,72 +32,101 @@ export interface IVehicleModel {
     FormsModule,
     MatButtonModule,
     MatCardModule,
-    MatListModule,
     ReactiveFormsModule,
     MatButtonModule,
-    MatGridListModule,
     MatInputModule,
     MatIconModule,
     MatTableModule,
-    ModelFormComponent,
+    MatMenuModule,
+    MatIconModule,
+    MatPaginator,
+    CommonModule,
   ],
   templateUrl: './vehicle-model.component.html',
   styleUrl: './vehicle-model.component.scss',
 })
 export class VehicleModelComponent implements OnInit {
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   models: IVehicleModel[] = [];
   private modelsService = inject(VehiclesModelsService);
   displayedColumns: string[] = ['brand', 'model', 'actions'];
+  paginatedProduct = new MatTableDataSource();
+  showForm: boolean = false;
 
-  selectedModel: IVehicleModel | null = null;
   private snackBar = inject(MatSnackBar);
 
   ngOnInit(): void {
-    this.loadModels();
+    this.getAllModels();
   }
 
-  loadModels(): void {
-    this.modelsService.getModels().subscribe((data) => {
-      this.models = data;
+  private dialog = inject(MatDialog);
+  openDialog(model: any = null): void {
+    const dialogRef = this.dialog.open(ModelFormComponent, {
+      width: '400px',
+      data: { modelData: model },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(result);
+      if (result) {
+        if (model) {
+          this.updateModels(model._id, result);
+        } else {
+          this.addModel(result);
+        }
+      }
     });
   }
 
-  deleteModel(id: string): void {
-    this.modelsService.deleteModel(id).subscribe(() => {
-      this.loadModels();
+  getAllModels() {
+    this.modelsService.getModels().subscribe({
+      next: (model) => {
+        this.models = model;
+        this.paginatedProduct.data = this.models;
+        this.paginatedProduct.paginator = this.paginator;
+      },
+      error: (err) =>
+        console.error('Erreur lors de la recuperation des donnees', err),
     });
   }
 
-  saveModel(model: IVehicleModel): void {
-    if (this.selectedModel) {
-      this.modelsService
-        .updateModel(this.selectedModel._id, model)
-        .subscribe(() => {
-          this.snackBar.openFromComponent(SnackBarComponent, {
-            data: { message: 'Modele mis à jour ✅', type: 'success' },
-            duration: 3000,
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-            panelClass: ['snackbar-bg'],
-          });
-          this.selectedModel = null;
-          this.loadModels();
-        });
-    } else {
-      this.modelsService.createModel(model).subscribe(() => {
-        this.snackBar.openFromComponent(SnackBarComponent, {
-          data: { message: 'Modele enregistré ✅', type: 'success' },
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['snackbar-bg'],
-        });
-        this.loadModels();
+  deleteProduct(product: any) {
+    this.modelsService.deleteModel(product._id).subscribe(() => {
+      this.getAllModels();
+      this.snackBar.openFromComponent(SnackBarComponent, {
+        data: { message: 'Modèle supprimé avec succès ✅', type: 'success' },
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snackbar-bg'],
       });
-    }
+    });
   }
 
-  editModel(model: IVehicleModel): void {
-    this.selectedModel = model;
+  addModel(model: any) {
+    console.log(model);
+    this.modelsService.createModel(model).subscribe(() => {
+      this.getAllModels();
+      this.snackBar.openFromComponent(SnackBarComponent, {
+        data: { message: 'Modèle créé avec succès ✅', type: 'success' },
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snackbar-bg'],
+      });
+    });
+  }
+
+  updateModels(id: string, productsData: any) {
+    this.modelsService.updateModel(id, productsData).subscribe(() => {
+      this.getAllModels();
+      this.snackBar.openFromComponent(SnackBarComponent, {
+        data: { message: 'Modèle mis à jour avec succès ✅', type: 'success' },
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snackbar-bg'],
+      });
+    });
   }
 }

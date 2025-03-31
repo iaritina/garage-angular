@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  Inject,
   inject,
   Input,
   OnChanges,
@@ -22,6 +23,14 @@ import { MatOption, MatSelect } from '@angular/material/select';
 import { IVehicleBrand } from '../../vehicle-brand/vehicle-brand.component';
 import { VehiclesBrandsService } from 'src/app/services/brands/vehicles-brands.service';
 import { IVehicleModel } from '../vehicle-model.component';
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialogContent,
+  MatDialogActions,
+  MatDialogModule,
+} from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-model-form',
@@ -33,6 +42,9 @@ import { IVehicleModel } from '../vehicle-model.component';
     MatButtonModule,
     MatSelect,
     MatOption,
+    MatDialogContent,
+    CommonModule,
+    MatDialogModule,
   ],
   templateUrl: './model-form.component.html',
   styleUrl: './model-form.component.scss',
@@ -40,10 +52,22 @@ import { IVehicleModel } from '../vehicle-model.component';
 export class ModelFormComponent implements OnInit, OnChanges {
   brands: IVehicleBrand[] = [];
 
-  @Input() model: IVehicleModel | null = null;
+  @Input() modelData: IVehicleModel | null = null;
   @Output() save = new EventEmitter();
 
-  private brandService = inject(VehiclesBrandsService);
+  constructor(
+    private brandService: VehiclesBrandsService,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<ModelFormComponent>
+  ) {
+    if (data?.modelData) {
+      this.modelData = data.modelData;
+      this.form.patchValue({
+        name: this.modelData?.name,
+        brand: this.modelData?.brand._id,
+      });
+    }
+  }
 
   form = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -54,18 +78,21 @@ export class ModelFormComponent implements OnInit, OnChanges {
     this.fetchBrands();
   }
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['model'] && this.model) {
+    if (changes['modelData'] && this.modelData) {
       this.form.patchValue({
-        name: this.model.name,
-        brand: this.model.brand._id,
+        name: this.modelData.name,
+        brand: this.modelData.brand._id,
       }); // met a jour la valeur du formulaire
     }
   }
 
   submit(event: Event) {
     event.preventDefault();
+    console.log('Formulaire soumis', this.form.value);
     if (this.form.valid) {
+      console.log('tonga');
       this.save.emit(this.form.value);
+      this.dialogRef.close(this.form.value);
       this.form.reset();
     }
   }
@@ -74,5 +101,9 @@ export class ModelFormComponent implements OnInit, OnChanges {
     this.brandService.getAllBrands().subscribe((brands) => {
       this.brands = brands;
     });
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 }
