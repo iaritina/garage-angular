@@ -67,7 +67,6 @@ export class VehicleModelComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(result);
       if (result) {
         if (model) {
           this.updateModels(model._id, result);
@@ -104,7 +103,6 @@ export class VehicleModelComponent implements OnInit {
   }
 
   addModel(model: any) {
-    console.log(model);
     this.modelsService.createModel(model).subscribe(() => {
       this.getAllModels();
       this.snackBar.openFromComponent(SnackBarComponent, {

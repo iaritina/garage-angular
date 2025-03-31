@@ -1,9 +1,9 @@
 import {
   Component,
-  EventEmitter,
+  Inject,
+  inject,
   Input,
   OnChanges,
-  Output,
   SimpleChanges,
 } from '@angular/core';
 import {
@@ -14,8 +14,15 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatOptionModule } from '@angular/material/core';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-brand-form',
@@ -25,17 +32,32 @@ import { MatInputModule } from '@angular/material/input';
     ReactiveFormsModule,
     MatInputModule,
     MatButtonModule,
+    MatDialogModule,
+    MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
   ],
   templateUrl: './brand-form.component.html',
   styleUrl: './brand-form.component.scss',
 })
 export class BrandFormComponent implements OnChanges {
   @Input() brand: { name: string } | null = null;
-  @Output() save = new EventEmitter();
 
   form = new FormGroup({
     name: new FormControl('', [Validators.required]),
   });
+
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<BrandFormComponent>
+  ) {
+    if (data?.brand) {
+      this.brand = data.brand;
+      this.form.patchValue({
+        name: this.brand?.name,
+      });
+    }
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['brand'] && this.brand) {
@@ -46,8 +68,12 @@ export class BrandFormComponent implements OnChanges {
   onSubmit(event: Event) {
     event.preventDefault();
     if (this.form.valid) {
-      this.save.emit(this.form.value);
+      this.dialogRef.close(this.form.value);
       this.form.reset();
     }
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 }
