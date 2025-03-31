@@ -1,0 +1,11 @@
+:root {
+  --sidenav-width: 240px; /* Largeur par défaut du sidenav */
+}
+
+.mat-sidenav-container {
+  --sidenav-width: 240px; /* Largeur du sidenav */
+}
+
+.mat-sidenav.mat-drawer {
+  width: var(--sidenav-width);
+}
