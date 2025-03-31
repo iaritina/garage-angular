@@ -44,5 +44,23 @@
   @media (max-width: 768px) {
     width: 100%;
     margin-left: 0;
+    .footer-right {
+      display: flex;
+      flex-wrap: wrap; /* Permet au texte de passer à la ligne si nécessaire */
+      justify-content: center; /* Centre le texte sur les petits écrans */
+      text-align: center; /* Aligne le texte au centre */
+      gap: 0.5rem; /* Ajoute un espace entre les éléments */
+
+      a {
+        color: var(--mat-sys-primary);
+        text-decoration: none;
+        white-space: nowrap; /* Empêche les mots de se couper */
+        margin: 0 0.5rem;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
   }
 }
