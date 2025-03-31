@@ -1,23 +1,27 @@
-<form [formGroup]="form" (submit)="onSubmit($event)">
-  <mat-label class="f-w-600 m-b-8 d-block"
-    >Ajout ou modification d'une marque</mat-label
+<h2 mat-dialog-title>{{ brand ? "Modifier" : "Ajouter" }} une marque</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" (submit)="onSubmit($event)">
+    <mat-form-field appearance="outline" class="w-100">
+      <input
+        matInput
+        name="name"
+        placeholder="Nom de la marque"
+        formControlName="name"
+        type="text"
+        required
+      />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">Annuler</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onSubmit($event)"
+    [disabled]="!form.valid"
   >
-  <mat-form-field appearance="outline" class="brand" color="primary">
-    <input
-      matInput
-      placeholder="nom de la marque"
-      name="name"
-      formControlName="name"
-    />
-  </mat-form-field>
-  <div class="m-t-8">
-    <button
-      mat-flat-button
-      color="primary"
-      class="m-r-8"
-      [disabled]="!form.valid"
-    >
-      {{ brand ? "Enregistrer" : "Ajouter" }}
-    </button>
-  </div>
-</form>
+    Enregistrer
+  </button>
+</mat-dialog-actions>

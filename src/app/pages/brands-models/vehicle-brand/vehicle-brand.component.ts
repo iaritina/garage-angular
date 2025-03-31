@@ -1,5 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { Title } from '@angular/platform-browser';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
@@ -17,8 +16,12 @@ import { VehiclesBrandsService } from 'src/app/services/brands/vehicles-brands.s
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarComponent } from 'src/app/components/snackbar/snack-bar/snack-bar.component';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { BrandFormComponent } from './form/brand-form.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { CommonModule } from '@angular/common';
+import { MatMenuModule } from '@angular/material/menu';
 
 export interface IVehicleBrand {
   _id: string;
@@ -39,18 +42,22 @@ export interface IVehicleBrand {
     MatInputModule,
     MatIconModule,
     MatTableModule,
-    BrandFormComponent,
+    CommonModule,
+    MatMenuModule,
+    MatPaginator,
   ],
   templateUrl: './vehicle-brand.component.html',
   styleUrls: ['./vehicle-brand.component.scss'],
 })
 export class VehicleBrandComponent implements OnInit {
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   brands: IVehicleBrand[] = [];
   private brandsService = inject(VehiclesBrandsService);
   private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
+  paginatedProduct = new MatTableDataSource();
 
   displayedColumns = ['name', 'actions'];
-  selectedBrand: IVehicleBrand | null = null;
 
   form = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -65,49 +72,66 @@ export class VehicleBrandComponent implements OnInit {
     return formControl?.invalid;
   }
 
-  editBrand(brand: IVehicleBrand) {
-    this.selectedBrand = brand;
-  }
   loadBrands(): void {
-    this.brandsService.getAllBrands().subscribe((data) => {
-      this.brands = data;
+    this.brandsService.getAllBrands().subscribe({
+      next: (brand) => {
+        this.brands = brand;
+        this.paginatedProduct.data = this.brands;
+        this.paginatedProduct.paginator = this.paginator;
+      },
+      error: (err) =>
+        console.error('Erreur lors de la recuperation des donnees', err),
     });
   }
 
-  saveBrand(brand: { name: string }) {
-    if (this.selectedBrand) {
-      this.brandsService
-        .updateBrand(this.selectedBrand._id, brand)
-        .subscribe(() => {
-          this.loadBrands();
-          this.snackBar.openFromComponent(SnackBarComponent, {
-            data: { message: 'Marque mise à jour ✅', type: 'success' },
-            duration: 3000,
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-            panelClass: ['snackbar-bg'],
-          });
-          this.selectedBrand = null;
-        });
-    } else {
-      this.brandsService.saveBrand(brand).subscribe(() => {
-        this.loadBrands();
-        this.snackBar.openFromComponent(SnackBarComponent, {
-          data: { message: 'Marque enregistrée ✅', type: 'success' },
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['snackbar-bg'],
-        });
-      });
-    }
+  openDialog(brand: any = null): void {
+    const dialogRef = this.dialog.open(BrandFormComponent, {
+      width: '400px',
+      data: { brand: brand },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        if (brand) {
+          this.updateModels(brand._id, result);
+        } else {
+          this.addModel(result);
+        }
+      }
+    });
   }
 
-  deleteBrand(id: string) {
-    this.brandsService.deleteBrand(id).subscribe(() => {
+  deleteProduct(product: any) {
+    this.brandsService.deleteBrand(product._id).subscribe(() => {
       this.loadBrands();
       this.snackBar.openFromComponent(SnackBarComponent, {
-        data: { message: 'Marque supprimée ✅', type: 'success' },
+        data: { message: 'Marque supprimée avec succès ✅', type: 'success' },
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snackbar-bg'],
+      });
+    });
+  }
+
+  addModel(model: any) {
+    this.brandsService.saveBrand(model).subscribe(() => {
+      this.loadBrands();
+      this.snackBar.openFromComponent(SnackBarComponent, {
+        data: { message: 'Marque créée avec succès ✅', type: 'success' },
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snackbar-bg'],
+      });
+    });
+  }
+
+  updateModels(id: string, productsData: any) {
+    this.brandsService.updateBrand(id, productsData).subscribe(() => {
+      this.loadBrands();
+      this.snackBar.openFromComponent(SnackBarComponent, {
+        data: { message: 'Marque mise à jour avec succès ✅', type: 'success' },
         duration: 3000,
         horizontalPosition: 'center',
         verticalPosition: 'top',

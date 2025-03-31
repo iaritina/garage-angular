@@ -88,9 +88,7 @@ export class ModelFormComponent implements OnInit, OnChanges {
 
   submit(event: Event) {
     event.preventDefault();
-    console.log('Formulaire soumis', this.form.value);
     if (this.form.valid) {
-      console.log('tonga');
       this.save.emit(this.form.value);
       this.dialogRef.close(this.form.value);
       this.form.reset();
