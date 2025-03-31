@@ -24,6 +24,7 @@ import { AppNavItemComponent } from './sidebar/nav-item/nav-item.component';
 import { navItems } from './sidebar/sidebar-data';
 import { UserService } from 'src/app/services/user/user.service';
 import { Token } from 'src/app/utils/token';
+import { FooterComponent } from './footer/footer.component';
 
 const MOBILE_VIEW = 'screen and (max-width: 768px)';
 const TABLET_VIEW = 'screen and (min-width: 769px) and (max-width: 1024px)';
@@ -48,9 +49,10 @@ export interface INavItem {
     NgScrollbarModule,
     TablerIconsModule,
     HeaderComponent,
+    FooterComponent,
   ],
   templateUrl: './full.component.html',
-  styleUrls: [],
+  styleUrls: ['./full.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class FullComponent implements OnInit {

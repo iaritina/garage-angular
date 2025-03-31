@@ -1,0 +1,48 @@
+@use "src/assets/scss/_variables" as *;
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: calc(100% - var(--sidenav-width, 0px));
+  margin-left: var(--sidenav-width, 0px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: $light;
+  color: #343a40;
+  border-top: 1px solid $light;
+  z-index: 1000;
+
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    flex-wrap: wrap;
+
+    .footer-left {
+      font-size: 0.9rem;
+    }
+
+    .footer-right {
+      font-size: 0.9rem;
+
+      a {
+        color: var(--mat-sys-primary);
+        text-decoration: none;
+        margin: 0 0.5rem;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    margin-left: 0;
+  }
+}
