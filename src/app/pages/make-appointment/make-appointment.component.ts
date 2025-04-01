@@ -99,6 +99,8 @@ export class MakeAppointmentComponent implements OnInit {
   minDate: Date;
   loading: boolean = false;
 
+  hasVehiclesFlag: boolean = false;
+
   private _token = inject(Token);
   private TOKEN = localStorage.getItem('token');
 
@@ -152,6 +154,7 @@ export class MakeAppointmentComponent implements OnInit {
     const client = this.getClient();
     this.vehicleService.getVehicleByUser(client).subscribe((vehicle) => {
       this.vehicles = vehicle;
+      this.hasVehiclesFlag = this.vehicles && this.vehicles.length > 0;
     });
   }
 

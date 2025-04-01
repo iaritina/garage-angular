@@ -1,4 +1,11 @@
+@use "src/assets/scss/_variables" as *;
+
 .logo {
   width: 100px; /* Ajustez la largeur selon vos besoins */
   height: auto; /* Maintient le ratio d'aspect */
+}
+
+.skip-btn {
+  background-color: #f0f0f0; /* Couleur grise claire */
+  color: #000; /* Texte noir pour contraste */
 }

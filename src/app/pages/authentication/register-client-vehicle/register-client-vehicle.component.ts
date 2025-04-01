@@ -127,4 +127,8 @@ export class RegisterClientVehicleComponent implements OnInit {
       this.userId = user._id;
     });
   }
+
+  skipVehicleRegistration() {
+    this.router.navigate(['/my-appointments']);
+  }
 }
