@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @use "src/assets/scss/style";
-@import "src/assets/scss/_variables";
+@use "src/assets/scss/_variables" as *;
 
 html,
 body {
@@ -12,13 +12,4 @@ body {
   .snackbar-bg {
     --mat-sys-inverse-surface: $secondary;
   }
-}
-.delete-btn {
-  color: red;
-}
-
-.actions-button {
-  display: flex;
-  justify-content: center;
-  gap: 10px; /* Ajustez cette valeur pour l'espacement souhaité entre les boutons */
 }

@@ -3,13 +3,7 @@ import { NavItem } from './nav-item/nav-item';
 
 export const navItems: INavItem[] = [
   {
-    navCap: 'Home',
-  },
-  {
-    displayName: 'Dashboard',
-    iconName: 'layout-grid-add',
-    route: '/dashboard',
-    roles: ['manager'],
+    navCap: 'Gestion & Suivi',
   },
   {
     displayName: 'Tableau de bord',
@@ -24,20 +18,20 @@ export const navItems: INavItem[] = [
     roles: ['mecanicien'],
   },
   {
-    displayName: 'Suivi des taches',
+    displayName: 'Suivi des tâches',
     iconName: 'hammer',
     route: '/tracking',
     roles: ['manager'],
   },
   {
-    displayName: 'Mes reservations',
+    displayName: 'Mes réservations',
     iconName: 'calendar-clock',
     route: '/my-appointments',
     roles: ['client'],
   },
 
   {
-    navCap: 'Navigations',
+    navCap: 'Gestion',
   },
   // {
   //   displayName: 'Rendez-vous',
@@ -54,10 +48,10 @@ export const navItems: INavItem[] = [
     displayName: 'Vehicules',
     iconName: 'car',
     route: '/vehicles',
-    roles: ['manager', 'mecanicien'],
+    roles: ['client'],
   },
   {
-    displayName: 'Mecaniciens',
+    displayName: 'Mécaniciens',
     iconName: 'users',
     route: '/mechanic',
     roles: ['manager'],
@@ -81,22 +75,9 @@ export const navItems: INavItem[] = [
     roles: ['manager'],
   },
   {
-    displayName: 'Mes taches',
+    displayName: 'Mes tâches',
     iconName: 'list-check',
     route: '/task',
-  },
-
-  {
-    navCap: 'Auth',
-  },
-  {
-    displayName: 'Login',
-    iconName: 'login',
-    route: '/authentication/login',
-  },
-  {
-    displayName: 'Register',
-    iconName: 'user-plus',
-    route: '/authentication/register',
+    roles: ['mecanicien'],
   },
 ];
