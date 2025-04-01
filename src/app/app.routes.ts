@@ -112,13 +112,6 @@ export const routes: Routes = [
         data: { roles: ['manager'], title: 'Gestion des mecaniciens' },
       },
       {
-        path: 'dashboard',
-        loadChildren: () =>
-          import('./pages/pages.routes').then((m) => m.PagesRoutes),
-        canActivate: [AuthGuard], // Protéger cette route avec AuthGuard
-        data: { roles: ['manager'], title: 'Tableau de bord' },
-      },
-      {
         path: 'ui-components',
         loadChildren: () =>
           import('./pages/ui-components/ui-components.routes').then(
