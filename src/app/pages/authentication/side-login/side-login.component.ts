@@ -56,7 +56,7 @@ export class AppSideLoginComponent {
         if (this.user.role === this._ROLE.client) {
           this.verifyClientVehicle(this.user.email);
         } else if (this.user.role === this._ROLE.admin) {
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/stat']);
         } else {
           this.router.navigate(['/task']);
         }
