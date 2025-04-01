@@ -112,13 +112,6 @@ export const routes: Routes = [
         data: { roles: ['manager'], title: 'Gestion des mécaniciens' },
       },
       {
-        path: 'ui-components',
-        loadChildren: () =>
-          import('./pages/ui-components/ui-components.routes').then(
-            (m) => m.UiComponentsRoutes
-          ),
-      },
-      {
         path: 'extra',
         loadChildren: () =>
           import('./pages/extra/extra.routes').then((m) => m.ExtraRoutes),
@@ -140,5 +133,5 @@ export const routes: Routes = [
     ],
   },
   // Redirection si l'URL ne correspond à aucune route
-  { path: '**', redirectTo: '/authentication/login' },
+  { path: '**', redirectTo: '/authentication/404' },
 ];
