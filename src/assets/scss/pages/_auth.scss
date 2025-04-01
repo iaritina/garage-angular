@@ -108,3 +108,12 @@
   top: -19px;
   right: 3px;
 }
+
+.autError {
+  display: flex;
+  justify-content: center;
+
+  font-weight: bolder;
+  font-size: 14px;
+  color: $error;
+}

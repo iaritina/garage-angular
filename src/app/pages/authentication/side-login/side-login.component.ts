@@ -74,7 +74,8 @@ export class AppSideLoginComponent {
         this.loadUser(token);
       },
       error: (error) => {
-        this.errorMessage = 'Identifiants incorrects';
+        console.log(error);
+        this.errorMessage = 'Échec de connexion : Identifiants incorrects.';
       },
     });
   }
