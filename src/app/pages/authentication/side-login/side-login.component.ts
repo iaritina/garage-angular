@@ -20,8 +20,6 @@ export interface IUser {
   templateUrl: './side-login.component.html',
 })
 export class AppSideLoginComponent {
-  email: string = '';
-  password: string = '';
   errorMessage: string = '';
 
   private vehicleService = inject(VehicleService);
@@ -30,7 +28,10 @@ export class AppSideLoginComponent {
   constructor(private router: Router, private userService: UserService) {}
 
   form = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.required]),
+    email: new FormControl<string>('', [
+      Validators.required,
+      Validators.required,
+    ]),
     password: new FormControl('', [Validators.required]),
   });
 
@@ -67,17 +68,22 @@ export class AppSideLoginComponent {
   }
 
   login() {
-    this.userService.login(this.email, this.password).subscribe({
-      next: (response) => {
-        localStorage.setItem('token', response.token);
-        const token = localStorage.getItem('token');
-        this.loadUser(token);
-      },
-      error: (error) => {
-        console.log(error);
-        this.errorMessage = 'Échec de connexion : Identifiants incorrects.';
-      },
-    });
+    const emailVal = this.form.value.email;
+    const pwdVal = this.form.value.password;
+
+    if (this.form.valid && emailVal && pwdVal) {
+      this.userService.login(emailVal, pwdVal).subscribe({
+        next: (response) => {
+          localStorage.setItem('token', response.token);
+          const token = localStorage.getItem('token');
+          this.loadUser(token);
+        },
+        error: (error) => {
+          console.log(error);
+          this.errorMessage = 'Échec de connexion : Identifiants incorrects.';
+        },
+      });
+    }
   }
 
   verifyClientVehicle(email: string) {
