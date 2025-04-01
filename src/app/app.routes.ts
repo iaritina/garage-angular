@@ -20,7 +20,7 @@ export const routes: Routes = [
     path: '',
     component: FullComponent,
     children: [
-      { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+      { path: '', redirectTo: '/authentication/login', pathMatch: 'full' },
       {
         path: 'tracking',
         component: MonitoringComponent,

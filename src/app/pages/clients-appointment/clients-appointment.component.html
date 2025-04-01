@@ -3,6 +3,7 @@
     <mat-card-title class="m-b-0">Vos rendez-vous</mat-card-title>
   </mat-card-header>
 
+  @if (hasVehiclesFlag) {
   <mat-card-content class="b-t-1">
     <p class="filter-description">
       Utilisez les filtres ci-dessous pour affiner les résultats de vos
@@ -138,4 +139,13 @@
     >
     </mat-paginator>
   </mat-card-content>
+  }@else {
+  <mat-card-content class="b-t-1 no_vehicle">
+    <p class="filter-description">
+      Vous n'avez pas de voiture, enregistrez
+      <a class="here" href="/vehicles">ici</a>
+    </p>
+  </mat-card-content>
+
+  }
 </mat-card>

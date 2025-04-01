@@ -80,6 +80,7 @@ export class ClientsAppointmentComponent implements OnInit, AfterViewInit {
   vehicles: any[] = [];
   mechanics: IUser[] = [];
   services: any[] = [];
+  hasVehiclesFlag: boolean = false;
 
   private _formBuilder = inject(FormBuilder);
 
@@ -134,6 +135,7 @@ export class ClientsAppointmentComponent implements OnInit, AfterViewInit {
     const client = this.getClient();
     this.vehicleService.getVehicleByUser(client).subscribe((data) => {
       this.vehicles = data;
+      this.hasVehiclesFlag = this.vehicles && this.vehicles.length > 0;
     });
   }
 

@@ -4,7 +4,8 @@
       >Réservez votre entretien automobile dès maintenant ! 🔧</mat-card-title
     >
   </mat-card-header>
-  <mat-card-content
+
+  @if (hasVehiclesFlag) {<mat-card-content
     class="b-t-1 form-container"
     fxLayout="row"
     fxLayoutAlign="center center"
@@ -202,6 +203,13 @@
         </div>
         }
       </div>
-    </form>
+    </form> </mat-card-content
+  >}@else {
+  <mat-card-content class="b-t-1 no_vehicle">
+    <p class="filter-description">
+      Vous n'avez pas de voiture, enregistrez
+      <a class="here" href="/vehicles">ici</a>
+    </p>
   </mat-card-content>
+  }
 </mat-card>
