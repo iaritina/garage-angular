@@ -18,13 +18,13 @@ export const navItems: INavItem[] = [
     roles: ['mecanicien'],
   },
   {
-    displayName: 'Suivi des taches',
+    displayName: 'Suivi des tâches',
     iconName: 'hammer',
     route: '/tracking',
     roles: ['manager'],
   },
   {
-    displayName: 'Mes reservations',
+    displayName: 'Mes réservations',
     iconName: 'calendar-clock',
     route: '/my-appointments',
     roles: ['client'],
@@ -48,10 +48,10 @@ export const navItems: INavItem[] = [
     displayName: 'Vehicules',
     iconName: 'car',
     route: '/vehicles',
-    roles: ['manager', 'mecanicien'],
+    roles: ['client'],
   },
   {
-    displayName: 'Mecaniciens',
+    displayName: 'Mécaniciens',
     iconName: 'users',
     route: '/mechanic',
     roles: ['manager'],
@@ -75,8 +75,9 @@ export const navItems: INavItem[] = [
     roles: ['manager'],
   },
   {
-    displayName: 'Mes taches',
+    displayName: 'Mes tâches',
     iconName: 'list-check',
     route: '/task',
+    roles: ['mecanicien'],
   },
 ];
