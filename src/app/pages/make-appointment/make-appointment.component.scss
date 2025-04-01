@@ -33,7 +33,7 @@
 }
 
 .vehicle-card {
-  background: white;
+  background: $white;
   border-radius: 12px;
   padding: 1.5rem;
   display: flex;
@@ -50,8 +50,8 @@
   }
 
   &.selected {
-    border-color: #1a237e;
-    background-color: #e8eaf6;
+    border-color: var(--mat-sys-primary);
+    background-color: $light;
   }
 
   .vehicle-icon {
