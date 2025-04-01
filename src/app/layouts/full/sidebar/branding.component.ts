@@ -5,12 +5,9 @@ import { CoreService } from 'src/app/services/core.service';
   selector: 'app-branding',
   imports: [],
   template: `
-    <a href="/" class="logodark">
-      <img
-        src="./assets/images/logos/garage.svg"
-        class="m-2 logo-brand"
-        alt="logo"
-      />
+    <a>
+      Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+      Lorem Ipsum has been the industry's standard dummy
     </a>
   `,
   styleUrl: './style.scss',
