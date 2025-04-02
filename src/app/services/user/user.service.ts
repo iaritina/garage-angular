@@ -69,4 +69,9 @@ export class UserService {
   getUserById(id: string): Observable<IUser> {
     return this.http.get<IUser>(`${environment.apiUrl}/users/${id}`);
   }
+
+  getCustomerCount() {
+    return this.http.get<any>(`${environment.apiUrl}/users/customer/count`);
+  }
+
 }
