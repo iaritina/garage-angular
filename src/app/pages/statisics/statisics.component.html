@@ -2,16 +2,23 @@
     <div class="title">
         <h2>Statistiques</h2>
     </div>
+    
     <div class="stats-container">
         <div class="stats-card">
             <h3>Commission aujourd'hui</h3>
             <p>{{ amountCommission.toLocaleString("fr-FR") }} Ar</p>
         </div>
+        
         <div class="stats-card">
             <h3>Véhicules réparés aujourd'hui</h3>
             <p>{{ repairedVehicle }}</p>
         </div>
+    </div>
     
-
+    <div class="chart-card">
+        <h3>Réparations par type de service</h3>
+        <div class="chart-container">
+            <canvas id="serviceChart"></canvas>
+        </div>
     </div>
 </div>

@@ -66,7 +66,7 @@ export const navItems: INavItem[] = [
     displayName: 'Produits',
     iconName: 'car-turbine',
     route: '/products',
-    roles: ['manager', 'mecanicien'],
+    roles: ['manager'],
   },
   {
     displayName: 'Services',
