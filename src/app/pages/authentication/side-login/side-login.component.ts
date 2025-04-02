@@ -28,11 +28,11 @@ export class AppSideLoginComponent {
   constructor(private router: Router, private userService: UserService) {}
 
   form = new FormGroup({
-    email: new FormControl<string>('', [
+    email: new FormControl<string>('donald@gmail.com', [
       Validators.required,
       Validators.required,
     ]),
-    password: new FormControl('', [Validators.required]),
+    password: new FormControl('donald', [Validators.required]),
   });
 
   private _ROLE = {

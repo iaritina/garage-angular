@@ -27,6 +27,8 @@
           </div>
           }
 
+          <p class="text-center font-weight-bold">Espace privée</p>
+
           <!-- Formulaire de connexion -->
           <form class="m-t-10" [formGroup]="form" (submit)="login()">
             <mat-label class="f-s-14 f-w-600 m-b-12 d-block"
@@ -49,23 +51,6 @@
               />
             </mat-form-field>
 
-            <div
-              class="d-flex align-items-center justify-content-center m-b-12"
-            >
-              <a
-                [routerLink]="['/authentication/login-mechanic']"
-                class="text-primary f-w-600 text-decoration-none f-s-14 m-r-10"
-              >
-                Mécanicien ?
-              </a>
-              <a
-                [routerLink]="['/authentication/login-manager']"
-                class="text-primary f-w-600 text-decoration-none f-s-14"
-              >
-                Administrateur ?
-              </a>
-            </div>
-
             <!-- Bouton de connexion -->
             <button
               mat-flat-button
@@ -77,16 +62,6 @@
               Se connecter
             </button>
           </form>
-
-          <span class="d-block f-w-500 text-center m-t-24">
-            Nouveau sur Garage ?
-            <a
-              [routerLink]="['/authentication/register']"
-              class="text-decoration-none text-primary f-w-500 f-s-14"
-            >
-              Créer un compte
-            </a>
-          </span>
         </mat-card-content>
       </mat-card>
     </div>
