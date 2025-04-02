@@ -117,3 +117,11 @@
   font-size: 14px;
   color: $error;
 }
+
+.d-flex.align-items-center.justify-content-center {
+  text-align: center;
+
+  a {
+    margin: 0 5px;
+  }
+}
