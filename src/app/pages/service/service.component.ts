@@ -88,6 +88,7 @@ export class ServiceComponent implements OnInit {
 
   saveService(service: any) {
     this.service.createNewService(service).subscribe(() => {
+      console.log("service",service);
       this.getAllService();
       this.snackBar.openFromComponent(SnackBarComponent, {
         data: { message: "Service créé avec succès ✅", type: 'success' },

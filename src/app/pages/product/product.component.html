@@ -18,7 +18,7 @@
 
             <ng-container matColumnDef="current_price">
               <mat-header-cell *matHeaderCellDef> Prix </mat-header-cell>
-              <mat-cell *matCellDef="let element"> {{ element.current_price }} </mat-cell>
+              <mat-cell *matCellDef="let element"> {{ element.current_price | number:'1.0-0' }} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="service">
