@@ -26,4 +26,8 @@ export class ServiceService {
   deleteService(id: string) {
     return this.http.put<any>(`${environment.apiUrl}/services/delete/${id}`,{});
   }
+
+  getCountService() {
+    return this.http.get<any>(`${environment.apiUrl}/services/statistiques`);
+  }
 }
