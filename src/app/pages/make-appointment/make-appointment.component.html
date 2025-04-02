@@ -195,7 +195,7 @@
             color="primary"
             class="m-r-8"
             matTooltip="Validez votre rendez-vous en un clic !"
-            [disabled]="!form.valid"
+           [disabled]="!form.valid || !appointment.selectedVehicle"
             (click)="saveAppointment()"
           >
             Confirmer le rendez-vous
