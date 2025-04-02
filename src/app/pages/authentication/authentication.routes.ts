@@ -6,6 +6,7 @@ import { RegisterClientVehicleComponent } from './register-client-vehicle/regist
 import { AppSamplePageComponent } from '../extra/sample-page/sample-page.component';
 import { NotfoundComponent } from 'src/app/components/404/notfound/notfound.component';
 import { SideLoginManagerComponent } from './side-login-manager/side-login-manager.component';
+import { SideLoginMechanicComponent } from './side-login-mechanic/side-login-mechanic.component';
 
 export const AuthenticationRoutes: Routes = [
   {
@@ -20,6 +21,11 @@ export const AuthenticationRoutes: Routes = [
         path: 'login-manager',
         component: SideLoginManagerComponent,
         data: { title: 'Espace privée' },
+      },
+      {
+        path: 'login-mechanic',
+        component: SideLoginMechanicComponent,
+        data: { title: 'Espace mécanicien' },
       },
       {
         path: 'register',

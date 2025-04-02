@@ -49,15 +49,20 @@
               />
             </mat-form-field>
 
-            <div class="d-flex align-items-center m-b-12">
-              <mat-checkbox color="primary"
-                >Se souvenir de cet appareil</mat-checkbox
-              >
+            <div
+              class="d-flex align-items-center justify-content-center m-b-12"
+            >
               <a
-                [routerLink]="['/']"
-                class="text-primary f-w-600 text-decoration-none m-l-auto f-s-14"
+                [routerLink]="['/authentication/login-mechanic']"
+                class="text-primary f-w-600 text-decoration-none f-s-14 m-r-10"
               >
-                Mot de passe oublié ?
+                Mécanicien ?
+              </a>
+              <a
+                [routerLink]="['/authentication/login-manager']"
+                class="text-primary f-w-600 text-decoration-none f-s-14"
+              >
+                Administrateur ?
               </a>
             </div>
 
