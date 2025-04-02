@@ -1,3 +1,55 @@
 .logo-brand {
   width: 100px;
 }
+
+.app-name {
+  font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+  font-size: 14px;
+  font-weight: 600; /* Un peu plus gras pour une meilleure lisibilité */
+  color: #2d3748; /* Nuance de gris-bleu moderne */
+  letter-spacing: 0.35px;
+  text-transform: uppercase; /* Optionnel pour un style plus technique */
+  position: relative;
+  display: inline-block;
+  padding-bottom: 2px;
+  transition: all 0.2s ease;
+}
+
+/* Effet de soulignage subtil */
+.app-name::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #e2e8f0; /* Ligne très subtile */
+  transform: scaleX(0);
+  transition: transform 0.25s ease;
+}
+
+/* Animation au survol */
+.app-name:hover {
+  color: #1a365d; /* Assombri au survol */
+}
+
+.app-name:hover::after {
+  transform: scaleX(1);
+  background-color: #4299e1; /* Bleu vif au survol */
+}
+
+/* Variante avec dégradé de couleur */
+.app-name.gradient {
+  background: linear-gradient(90deg, #4f46e5, #06b6d4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+}
+
+/* Variante compacte */
+.app-name.compact {
+  letter-spacing: 0;
+  font-weight: 500;
+  opacity: 0.9;
+}

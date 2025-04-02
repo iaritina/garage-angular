@@ -5,10 +5,7 @@ import { CoreService } from 'src/app/services/core.service';
   selector: 'app-branding',
   imports: [],
   template: `
-    <a>
-      Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-      Lorem Ipsum has been the industry's standard dummy
-    </a>
+    <span class="app-name">M1P12Mean-Haroavo-Iaritina</span>
   `,
   styleUrl: './style.scss',
 })
