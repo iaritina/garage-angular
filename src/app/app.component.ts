@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
         mergeMap((route) => route.data)
       )
       .subscribe((data) => {
-        const pageTitle = data['title'] ? `Garage - ${data['title']}` : '';
+        const pageTitle = data['title'] ? `M1P12Mean-Haroavo-Iaritina` : '';
         this.titleService.setTitle(pageTitle);
       });
   }

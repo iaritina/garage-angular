@@ -1,67 +1,62 @@
 .container {
-    max-width: 900px;
-    margin: 0 auto;
     padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .title {
-    text-align: center; 
-    color: #333;
+    margin-bottom: 24px;
+    text-align: center;
+    
+    h2 {
+        color: #1e293b;
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0;
+    }
 }
 
 .stats-container {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
-    flex-wrap: wrap;
-    padding-top: 125px;
+    margin-bottom: 30px;
 }
 
-.stats-card {
-    background: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow:  4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width: calc(50% - 10px);  // 50% width for large screens
+.stats-card, .chart-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    
+    h3 {
+        color: #64748b;
+        font-size: 16px;
+        font-weight: 500;
+        margin-top: 0;
+        margin-bottom: 12px;
+    }
+    
+    p {
+        color: #1e293b;
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0;
+    }
 }
 
-.stats-card h3 {
-    font-size: 16px;
-    color: #555;
-}
-
-.stats-card p {
-    font-size: 24px;
-    font-weight: 600;
-    color: #333;
-    margin: 10px 0 0;
+.chart-card {
+    margin-top: 20px;
+    
+    h3 {
+        color: #1e293b;
+        font-size: 18px;
+        margin-bottom: 16px;
+    }
 }
 
 .chart-container {
-    margin-top: 30px;
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-/* Mobile responsiveness */
-@media (max-width: 600px) {
-    .stats-card {
-        width: 100%; // Full width for mobile screens
-        margin-bottom: 15px;  // Space between cards
-    }
-
-    .stats-container {
-        padding-top: 30px;  // Reduced padding on mobile
-    }
-
-    .chart-container {
-        margin-top: 20px;  // Reduced top margin for mobile
-    }
-
-    .title {
-        font-size: 18px;  // Adjust title size for smaller screens
-    }
+    position: relative;
+    height: 300px;
+    width: 100%;
 }
