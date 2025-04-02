@@ -20,8 +20,8 @@ export class SideLoginManagerComponent {
   errorMessage: string = '';
 
   form = new FormGroup({
-    email: new FormControl<string>('', [Validators.required]),
-    password: new FormControl('', [Validators.required]),
+    email: new FormControl<string>('root@gmail.com', [Validators.required]),
+    password: new FormControl('root123', [Validators.required]),
   });
 
   constructor(private authService: AuthService, private router: Router) {}
