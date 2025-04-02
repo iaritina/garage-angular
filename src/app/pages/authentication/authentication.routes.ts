@@ -5,6 +5,7 @@ import { AppSideRegisterComponent } from './side-register/side-register.componen
 import { RegisterClientVehicleComponent } from './register-client-vehicle/register-client-vehicle.component';
 import { AppSamplePageComponent } from '../extra/sample-page/sample-page.component';
 import { NotfoundComponent } from 'src/app/components/404/notfound/notfound.component';
+import { SideLoginManagerComponent } from './side-login-manager/side-login-manager.component';
 
 export const AuthenticationRoutes: Routes = [
   {
@@ -14,6 +15,11 @@ export const AuthenticationRoutes: Routes = [
         path: 'login',
         component: AppSideLoginComponent,
         data: { title: 'Connexion' },
+      },
+      {
+        path: 'login-manager',
+        component: SideLoginManagerComponent,
+        data: { title: 'Espace privée' },
       },
       {
         path: 'register',
