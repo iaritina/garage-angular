@@ -11,7 +11,16 @@
 
         <div class="stats-card">
             <h3>Service le plus demandé</h3>
-            <p>{{ service.name }}: <span class="count">{{ service.count }}</span></p>
+            @if (service) {
+                <p>
+                    {{ service.name }}: <span class="count">{{ service.count }}</span>
+                </p>
+            } @else {
+                <p>Aucune donnée disponible</p>
+            }
+            
+            
         </div>
+        
     </div>
 </div>
