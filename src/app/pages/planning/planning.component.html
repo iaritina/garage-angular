@@ -1,0 +1,115 @@
+<div class="calendar-container">
+    <div class="calendar-header">
+      <button class="nav-btn" (click)="previousMonth()" style="background-color:cornflowerblue;">
+       Precedent
+      </button>
+      <h2>{{ currentMonthLabel }}</h2>
+      <button class="nav-btn" (click)="nextMonth()" style="background-color:cornflowerblue;">
+       Suivant
+      </button>
+    </div>
+  
+    <div class="mechanics-filter">
+      <h3>Filtrer par mécanicien :</h3>
+      <div class="mechanics-list">
+        @for(mechanic of mechanics; track mechanic._id) {
+          <label class="mechanic-option">
+            <input type="checkbox" 
+                   [checked]="isMechanicSelected(mechanic._id)"
+                   (change)="toggleMechanic(mechanic._id)">
+            <span class="checkmark" [style.backgroundColor]="mechanic.color"></span>
+            {{ mechanic.firstname }}
+          </label>
+        }
+      </div>
+    </div>
+  
+    <div class="calendar-grid">
+      <!-- En-têtes des jours -->
+       @for(day of weekdayNames; track day) {
+        <div class="week-header" >
+            {{ day }}
+          </div>
+       }
+       
+  
+      <!-- Cases des jours -->
+      @for(week of weeks; track week) {
+        @for(day of week; track day.date) {
+          <div class="day-cell" 
+               [class.current-month]="day.isCurrentMonth"
+               [class.other-month]="!day.isCurrentMonth"
+               [class.today]="isToday(day.date)">
+            
+            <div class="day-number">{{ day.date.getDate() }}</div>
+            
+            @if(hasAppointment(day.date)) {
+              <div class="appointments">
+                @for(appointment of getAppointments(day.date); track appointment._id) {
+                  <div class="appointment-badge" 
+                       [style.background-color]="getMechanicColor(appointment.mechanic._id)"
+                       (click)="openAppointmentDetails(appointment, $event)">
+                    {{ appointment.client.firstname }}
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      }
+    </div>
+  </div>
+  
+<!-- Modale de détails -->
+@if(showModal && selectedAppointment) {
+    <div class="modal-overlay" (click)="closeModal()">
+      <div class="modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Rendez-vous du {{ getFormattedDate(selectedAppointment.date) }}</h3>
+          <button class="close-btn" (click)="closeModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        
+        <div class="modal-body">
+          
+          <!-- Section Véhicule -->
+          <div class="info-section">
+            <h4><i class="fas fa-car"></i> Véhicule</h4>
+            <p><strong>{{ selectedAppointment.vehicle.model.brand.name }} {{ selectedAppointment.vehicle.model.name }}</strong></p>
+            <p class="text-muted">Immatriculation: {{ selectedAppointment.vehicle.immatriculation }}</p>
+            <p class="text-muted">Année: {{ selectedAppointment.vehicle.year }}</p>
+          </div>
+          
+          <!-- Section Mécanicien -->
+          <div class="info-section">
+            <h4><i class="fas fa-tools"></i> Mécanicien</h4>
+            <div class="mechanic-badge" [style.background-color]="getMechanicColor(selectedAppointment.mechanic._id)">
+              {{ selectedAppointment.mechanic.firstname }}
+            </div>
+          </div>
+          
+          <!-- Section Prestations -->
+          <div class="info-section">
+            <h4><i class="fas fa-list"></i> Prestations</h4>
+            <div class="prestations">
+              @for(prestation of selectedAppointment.prestations; track prestation._id) {
+                <div class="prestation-item">
+                  <span>{{ prestation.service.name }}</span>
+                  <span class="duration">{{ prestation.service.duration }} min</span>
+                </div>
+              }
+            </div>
+          </div>
+          
+          <!-- Section Statut -->
+          <div class="info-section">
+            <h4><i class="fas fa-info-circle"></i> Statut</h4>
+            <div class="status" [class.completed]="selectedAppointment.status">
+              {{ selectedAppointment.status ? 'Terminé' : 'En attente' }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+}

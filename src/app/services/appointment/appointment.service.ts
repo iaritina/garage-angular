@@ -10,6 +10,11 @@ import { environment } from 'src/environments/environments';
 export class AppointmentService {
   private http = inject(HttpClient);
 
+
+  findAll () {
+    return this.http.get<any[]>(`${environment.apiUrl}/appointments`);
+  }
+
   createApt(appointment: any, intervention: any): Observable<any> {
     const body = { appointment, intervention };
     console.log('body', body);

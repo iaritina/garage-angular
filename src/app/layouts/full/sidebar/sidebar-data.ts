@@ -18,6 +18,12 @@ export const navItems: INavItem[] = [
     roles: ['mecanicien'],
   },
   {
+    displayName: 'Planning de rendez-vous',
+    iconName: 'calendar',
+    route: '/planning',
+    roles: ['manager'],
+  },
+  {
     displayName: 'Suivi des tâches',
     iconName: 'hammer',
     route: '/tracking',
