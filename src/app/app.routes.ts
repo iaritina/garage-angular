@@ -14,6 +14,7 @@ import { TaskComponent } from './pages/task/task.component';
 import { ClientsAppointmentComponent } from './pages/clients-appointment/clients-appointment.component';
 import { StatisicsComponent } from './pages/statisics/statisics.component';
 import { BrandsStatComponent } from './pages/managers/brands-stat/brands-stat.component';
+import { PlanningComponent } from './pages/planning/planning.component';
 
 export const routes: Routes = [
   {
@@ -21,6 +22,12 @@ export const routes: Routes = [
     component: FullComponent,
     children: [
       { path: '', redirectTo: '/authentication/login', pathMatch: 'full' },
+      {
+        path: 'planning',
+        component: PlanningComponent,
+        canActivate: [AuthGuard],
+        data: { roles: ['manager'], title: 'Planning de rendez vous' }
+      },
       {
         path: 'tracking',
         component: MonitoringComponent,
