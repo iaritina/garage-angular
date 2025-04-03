@@ -1,6 +1,6 @@
 <mat-card class="cardWithShadow theme-card">
   <mat-card-header class="d-flex justify-content-between align-items-center">
-    <mat-card-title class="m-b-0">Mes taches</mat-card-title>
+    <mat-card-title class="m-b-0">Mes tâches</mat-card-title>
   </mat-card-header>
   <mat-card-content class="b-t-1">
     <div class="row">
@@ -54,3 +54,20 @@
     </div>
   </mat-card-content>
 </mat-card>
+
+<!-- 🔹 Formulaire dans un popup -->
+<ng-template #taskKilometerDialog>
+  <h2 mat-dialog-title>Enregistrer le kilométrage</h2>
+  <mat-dialog-content>
+    <form [formGroup]="kilometerForm" [ngStyle]="{'margin-top': '20px'}">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Kilométrage</mat-label>
+        <input matInput type="number" formControlName="kilometrage" required>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="dialogRef.close()">Annuler</button>
+    <button mat-raised-button color="primary" (click)="submitKilometrage()" [disabled]="kilometerForm.invalid">Valider</button>
+  </mat-dialog-actions>
+</ng-template>
