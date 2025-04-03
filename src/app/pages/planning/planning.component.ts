@@ -55,21 +55,22 @@ export class PlanningComponent implements OnInit {
   generateWeeks() {
     const year = this.currentDate.getFullYear();
     const month = this.currentDate.getMonth();
-    
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    
-    // Ajuster pour commencer par Lundi
+  
+    // Utilisation de Date.UTC pour obtenir les dates en UTC
+    const firstDay = new Date(Date.UTC(year, month, 1));
+    const lastDay = new Date(Date.UTC(year, month + 1, 0));
+  
+    // Ajuster pour commencer par Lundi (en UTC)
     let startDate = new Date(firstDay);
-    if (startDate.getDay() === 0) { // Dimanche
-      startDate.setDate(startDate.getDate() - 6);
+    if (startDate.getUTCDay() === 0) { // Dimanche
+      startDate.setUTCDate(startDate.getUTCDate() - 6);
     } else {
-      startDate.setDate(startDate.getDate() - (startDate.getDay() - 1));
+      startDate.setUTCDate(startDate.getUTCDate() - (startDate.getUTCDay() - 1));
     }
-    
+  
     this.weeks = [];
     let currentDate = new Date(startDate);
-    
+  
     while (currentDate <= lastDay || this.weeks.length < 6) {
       const week = [];
       for (let i = 0; i < 7; i++) {
@@ -77,11 +78,12 @@ export class PlanningComponent implements OnInit {
           date: new Date(currentDate),
           isCurrentMonth: currentDate.getMonth() === month
         });
-        currentDate.setDate(currentDate.getDate() + 1);
+        currentDate.setUTCDate(currentDate.getUTCDate() + 1);
       }
       this.weeks.push(week);
     }
   }
+  
 
   get currentMonthLabel(): string {
     return this.datePipe.transform(this.currentDate, 'MMMM yyyy') || '';
