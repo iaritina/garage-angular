@@ -30,6 +30,12 @@ export const navItems: INavItem[] = [
     roles: ['manager'],
   },
   {
+    displayName: "Mes historiques",
+    iconName: 'calendar-clock',
+    route: '/my-history',
+    roles: ['client'],
+  },
+  {
     displayName: 'Mes réservations',
     iconName: 'calendar-clock',
     route: '/my-appointments',
