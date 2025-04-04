@@ -13,4 +13,8 @@ export class MileageService {
     return this.http.post(`${environment.apiUrl}/mileages`,{appointment, vehicle,service,kilometer})
   }
 
+  getMileageByAppointment(id: any) {
+    return this.http.get<any[]>(`${environment.apiUrl}/mileages/${id}`)
+  }
+
 }

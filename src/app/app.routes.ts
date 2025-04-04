@@ -15,6 +15,7 @@ import { ClientsAppointmentComponent } from './pages/clients-appointment/clients
 import { StatisicsComponent } from './pages/statisics/statisics.component';
 import { BrandsStatComponent } from './pages/managers/brands-stat/brands-stat.component';
 import { PlanningComponent } from './pages/planning/planning.component';
+import { ClientsHistoryComponent } from './pages/clients-history/clients-history.component';
 
 export const routes: Routes = [
   {
@@ -51,6 +52,12 @@ export const routes: Routes = [
         component: ClientsAppointmentComponent,
         canActivate: [AuthGuard],
         data: { roles: ['client'], title: 'Mes réservations' },
+      },
+      {
+        path: 'my-history',
+        component: ClientsHistoryComponent,
+        canActivate: [AuthGuard],
+        data: { role: ['client'], title: "Mes historiques" }
       },
       {
         path: 'vehicles',

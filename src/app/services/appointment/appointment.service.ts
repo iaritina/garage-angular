@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IAppointment } from 'src/app/pages/clients-appointment/clients-appointment.component';
+import { Token } from 'src/app/utils/token';
 import { environment } from 'src/environments/environments';
 
 @Injectable({
@@ -10,6 +11,8 @@ import { environment } from 'src/environments/environments';
 export class AppointmentService {
   private http = inject(HttpClient);
 
+    private _TOKEN = localStorage.getItem('token');
+    private tokenUtils = inject(Token);
 
   findAll () {
     return this.http.get<any[]>(`${environment.apiUrl}/appointments`);
@@ -49,5 +52,10 @@ export class AppointmentService {
       `${environment.apiUrl}/appointments/client/${clientId}`,
       { params: filters }
     );
+  }
+
+  getClientAppointment() {
+    const id = this.tokenUtils.getUserFromToken(this._TOKEN);
+    return this.http.get<any[]>(`${environment.apiUrl}/appointments/appointment-client/${id}`);
   }
 }

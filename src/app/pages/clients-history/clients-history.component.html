@@ -1,7 +1,7 @@
 <div class="calendar-container">
     <div class="calendar-header">
       <button class="nav-btn" (click)="previousMonth()" style="background-color:cornflowerblue;">
-      Précédent
+        Précédent
       </button>
       <h2>{{ currentMonthLabel }}</h2>
       <button class="nav-btn" (click)="nextMonth()" style="background-color:cornflowerblue;">
@@ -83,24 +83,34 @@
           
           <!-- Section Mécanicien -->
           <div class="info-section">
-            <h4><i class="fas fa-tools"></i> Résponsable</h4>
-            <div class="mechanic-badge" [style.background-color]="getMechanicColor(selectedAppointment.mechanic._id)">
-              {{ selectedAppointment.mechanic.firstname }}
+            <h4><i class="fas fa-tools"></i> Mécanicien</h4>
+            <div class="mechanic-container">
+              <span class="mechanic-label">Résponsable</span>
+              <div class="mechanic-badge" [style.background-color]="getMechanicColor(selectedAppointment.mechanic._id)">
+                {{ selectedAppointment.mechanic.firstname }}
+              </div>
             </div>
           </div>
           
+          
           <!-- Section Prestations -->
-          <div class="info-section">
-            <h4><i class="fas fa-list"></i> Prestations</h4>
-            <div class="prestations">
-              @for(prestation of selectedAppointment.prestations; track prestation._id) {
-                <div class="prestation-item">
-                  <span>{{ prestation.service.name }}</span>
-                  <span class="duration">{{ prestation.service.duration }} min</span>
-                </div>
-              }
+<div class="info-section">
+    <h4><i class="fas fa-list"></i> Prestations</h4>
+    <div class="prestations">
+        @for(prestation of selectedAppointment.prestations; track prestation._id) {
+            <div class="prestation-item">
+              <span>{{ prestation.service.name }}</span>
+              <div class="kilometer-info">
+                <span class="kilometer-record"><strong>Km :</strong> {{ mileage.kilometer }} km</span>
+                <span class="due-miles"><strong>Prochaine echéance :</strong> {{ mileage.kilometer + prestation.service.next_service_km }} km</span>
+              </div>
             </div>
-          </div>
+          }
+          
+          
+    </div>
+  </div>
+  
           
           <!-- Section Statut -->
           <div class="info-section">
