@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
 import { IUser } from 'src/app/pages/authentication/side-login/side-login.component';
-import { environment } from 'src/environments/environments';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -73,5 +73,4 @@ export class UserService {
   getCustomerCount() {
     return this.http.get<any>(`${environment.apiUrl}/users/customer/count`);
   }
-
 }
